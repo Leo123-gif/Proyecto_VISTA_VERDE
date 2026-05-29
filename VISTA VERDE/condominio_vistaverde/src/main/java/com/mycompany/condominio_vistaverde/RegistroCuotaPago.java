@@ -90,23 +90,30 @@ cmbAño.addItem("Seleccionar");
      * Revisa si todos los meses anteriores al mes seleccionado ya fueron pagados.
      * Retorna el nombre del primer mes que falta por pagar, o null si todo está correcto.
      */
-    private String obtenerMesAnteriorNoPagado(String casa, String mesSeleccionado, String anio) {
-        for (String mes : ORDEN_MESES) {
-            // Si el ciclo llega al mes que queremos pagar, significa que los anteriores están pagados
-            if (mes.equals(mesSeleccionado)) {
-                break; 
-            }
-            
-            // Verificamos si el mes anterior iterado NO existe en el XML
-            if (!BDXML.existePago(casa, mes, anio)) {
-                return mes; // Retornamos el mes que falta pagar
-            }
+  private String obtenerMesAnteriorNoPagado(
+        int numeroCasa,
+        String mesSeleccionado,
+        int anio
+) {
+
+    for (String mes : ORDEN_MESES) {
+
+        if (mes.equals(mesSeleccionado)) {
+            break;
         }
-        return null; // Si termina el ciclo o llega al break, todo está en orden
+
+        if (!BDXML.existePago(
+                numeroCasa,
+                mes,
+                anio
+        )) {
+
+            return mes;
+        }
     }
-    
-    
-    
+
+    return null;
+}
     
     private void validarCombos() {
  if (cmbCasas.getSelectedItem() == null
@@ -308,60 +315,169 @@ cmbAño.addItem("Seleccionar");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
-// --- CÓDIGO REFACTORIZADO A POO (REEMPLAZAR TODO EL CONTENIDO DEL BOTÓN) ---
 
-// 1. CAPTURA DE DATOS DESDE LA UI
-String casaRaw = cmbCasas.getSelectedItem().toString().trim();
-int numCasa = Integer.parseInt(casaRaw.replace("CASA ", "")); // Extraer solo el número
-String mes = cmbMes.getSelectedItem().toString();
-int año = Integer.parseInt(cmbAño.getSelectedItem().toString());
-double monto = Double.parseDouble(txtCuota.getText().replace("Q.", "").trim());
+try {
 
-// 2. BUSCAR DUEÑO Y CREAR OBJETO PROPIETARIO
-String[] datos = BDXML.obtenerDatosPropietario("CASA " + numCasa);
-if (datos == null || datos[0].equals("Sin dueño")) {
-    JOptionPane.showMessageDialog(this, "ERROR: No hay dueño para la casa " + numCasa);
+        // =========================
+        // OBTENER DATOS DE LA UI
+        // =========================
+
+        String casaTexto = cmbCasas.getSelectedItem().toString();
+
+        if (casaTexto.equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione una casa.");
+            return;
+        }
+
+        int numeroCasa = Integer.parseInt(
+                casaTexto.replace("CASA ", "")
+        );
+
+        String mes = cmbMes.getSelectedItem().toString();
+        int año = Integer.parseInt(
+                cmbAño.getSelectedItem().toString()
+        );
+
+        double monto = Double.parseDouble(
+                txtCuota.getText()
+                        .replace("Q.", "")
+                        .trim()
+        );
+
+        // =========================
+        // VALIDAR PROPIETARIO
+        // =========================
+
+Propietario propietario =
+        BDXML.obtenerPropietario(numeroCasa);
+
+if (propietario == null) {
+
+    JOptionPane.showMessageDialog(this,
+            "La casa no tiene propietario registrado.");
+
     return;
 }
-// Creamos el objeto Propietario (POO)
-Propietario dueño = new Propietario(datos[0], datos[1], datos[2], numCasa);
+        // =========================
+        // CREAR OBJETO PAGO
+        // =========================
 
-// 3. CREAR OBJETO PAGO (POO)
-Pago nuevoPago = new Pago(mes, año, monto, "PAGADO");
+        Pago pago =
+                new Pago(
+                        mes,
+                        año,
+                        monto,
+                        "PAGADO"
+                );
 
-// 4. VALIDACIONES (Usando los datos de los objetos)
-String mesFaltante = obtenerMesAnteriorNoPagado("CASA " + numCasa, nuevoPago.getMes(), String.valueOf(nuevoPago.getAño()));
-if (mesFaltante != null) {
-    JOptionPane.showMessageDialog(this, "Falta el pago de: " + mesFaltante);
-    return;
-}
+        // =========================
+        // VALIDAR PAGOS ANTERIORES
+        // =========================
 
-if (BDXML.existePago("CASA " + numCasa, nuevoPago.getMes(), String.valueOf(nuevoPago.getAño()))) {
-    JOptionPane.showMessageDialog(this, "Ya existe un pago para este mes.");
-    return;
-}
+       String mesPendiente =
+        obtenerMesAnteriorNoPagado(
+                numeroCasa,
+                pago.getMes(),
+                pago.getAño()
+        );
 
-// 5. CONFIRMACIÓN
-int respuesta = JOptionPane.showConfirmDialog(this, 
-    "¿Registrar pago para " + dueño.getNombre() + "?\n" +
-    "Monto: Q." + nuevoPago.getMonto(), "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (mesPendiente != null) {
 
-if (respuesta == JOptionPane.YES_OPTION) {
-    // 6. PROCESAR USANDO EL OBJETO
-    BDXML.registrarPagoPOO(numCasa, nuevoPago);
+            JOptionPane.showMessageDialog(this,
+                    "Primero debe pagar: " + mesPendiente);
 
-    // 7. ENVÍO DE CORREO USANDO LOS GETTERS DEL OBJETO
-    enviarCorreoPago("CASA " + numCasa, nuevoPago.getMes(), 
-                     String.valueOf(nuevoPago.getAño()), 
-                     String.valueOf(nuevoPago.getMonto()), 
-                     dueño.getCorreo(), dueño.getNombre());
+            return;
+        }
 
-    JOptionPane.showMessageDialog(this, "Pago exitoso. Recibo enviado a: " + dueño.getCorreo());
-    
-    // RESET UI
-    cmbCasas.setSelectedIndex(0);
-    btnPago.setEnabled(false);
-}
+        // =========================
+        // VALIDAR DUPLICADOS
+        // =========================
+
+        boolean existe =
+        BDXML.existePago(
+                numeroCasa,
+                pago.getMes(),
+                pago.getAño()
+        );
+
+        if (existe) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Ese pago ya existe.");
+
+            return;
+        }
+
+        // =========================
+        // CONFIRMACIÓN
+        // =========================
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Desea registrar el pago?\n\n"
+                + "Casa: " + numeroCasa
+                + "\nPropietario: "
+                + propietario.getNombre()
+                + "\nMonto: Q." + pago.getMonto(),
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // =========================
+        // GUARDAR EN XML
+        // =========================
+
+        BDXML.registrarPagoPOO(
+                numeroCasa,
+                pago
+        );
+
+        // =========================
+        // ENVIAR CORREO
+        // =========================
+
+        enviarCorreoPago(
+                "CASA " + numeroCasa,
+                pago.getMes(),
+                String.valueOf(pago.getAño()),
+                String.valueOf(pago.getMonto()),
+                propietario.getCorreo(),
+                propietario.getNombre()
+        );
+
+        // =========================
+        // MENSAJE
+        // =========================
+
+        JOptionPane.showMessageDialog(this,
+                "Pago registrado correctamente.");
+
+        // =========================
+        // LIMPIAR FORMULARIO
+        // =========================
+
+        cmbCasas.setSelectedIndex(0);
+        cmbMes.setSelectedIndex(0);
+        cmbAño.setSelectedIndex(0);
+
+        btnPago.setEnabled(false);
+
+    } catch (Exception e) {
+
+        JOptionPane.showMessageDialog(this,
+                "Error al registrar pago:\n"
+                + e.getMessage());
+
+        e.printStackTrace();
+    }
+
+
+
     }//GEN-LAST:event_btnPagoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

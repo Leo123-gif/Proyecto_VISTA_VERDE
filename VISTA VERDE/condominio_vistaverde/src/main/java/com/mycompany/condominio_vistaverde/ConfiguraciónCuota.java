@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.condominio_vistaverde;
-import com.mycompany.condominio_vistaverde.MenuPrincipal;
 import java.awt.HeadlessException;
 import javax.swing.table.DefaultTableModel;
 import org.w3c.dom.DOMException;
@@ -34,13 +33,14 @@ public class ConfiguraciónCuota extends javax.swing.JFrame {
     
 private void mostrarCuotaActual() {
 
-    String cuota = BDXML.obtenerCuotaActual();
+    double cuota =
+            BDXML.obtenerCuotaActual();
 
-    txtCuotaActual1.setText("Q. " + cuota);
+    txtCuotaActual1.setText(
+            "Q. "
+            + String.format("%.2f", cuota)
+    );
 }
-    
-    
-
     
 
     /**
@@ -208,65 +208,136 @@ private void mostrarCuotaActual() {
     }//GEN-LAST:event_txtCuotaConfirmarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-String nuevaCuotaTexto = txtCuotaNueva.getText().trim();
-String confirmarCuotaTexto = txtCuotaConfirmar.getText().trim();
+                                  
 
-// 1. Validación de campos vacíos
-if (nuevaCuotaTexto.isEmpty() || confirmarCuotaTexto.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Debe completar todos los campos.");
-    return;
-}
+    String nuevaCuotaTexto =
+            txtCuotaNueva.getText().trim();
 
-double nuevaCuota;
-double confirmarCuota;
+    String confirmarCuotaTexto =
+            txtCuotaConfirmar.getText().trim();
 
-try {
-    // Reemplazamos coma por punto por si el usuario usa el teclado numérico con configuración regional distinta
-    nuevaCuota = Double.parseDouble(nuevaCuotaTexto.replace(",", "."));
-    confirmarCuota = Double.parseDouble(confirmarCuotaTexto.replace(",", "."));
+    // =========================================
+    // VALIDAR CAMPOS VACÍOS
+    // =========================================
 
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(this, "Solo se permiten números y decimales (use punto para decimal).");
-    return;
-}
+    if (nuevaCuotaTexto.isEmpty()
+            || confirmarCuotaTexto.isEmpty()) {
 
-// 2. Validación de valores lógicos
-if (nuevaCuota <= 0 || confirmarCuota <= 0) {
-    JOptionPane.showMessageDialog(this, "La cuota debe ser mayor a 0.");
-    return;
-}
+        JOptionPane.showMessageDialog(
+                this,
+                "Debe completar todos los campos."
+        );
 
-// 3. Comparación exacta
-if (Double.compare(nuevaCuota, confirmarCuota) != 0) {
-    JOptionPane.showMessageDialog(this, "Las cuotas no coinciden.");
-    return;
-}
+        return;
+    }
 
-// 4. Diálogo con botones en español (Sí / No)
-Object[] opciones = {"Sí", "No"};
-int respuesta = JOptionPane.showOptionDialog(
-        this,
-        "¿Está seguro de actualizar la cuota a: Q." + String.format("%.2f", nuevaCuota) + "?",
-        "Confirmar actualización",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE,
-        null,
-        opciones,
-        opciones[0]
-);
+    double nuevaCuota;
+    double confirmarCuota;
 
-if (respuesta != JOptionPane.YES_OPTION) {
-    return;
-}
+    try {
 
-// 5. Guardado (Usamos el punto decimal para la BD)
-BDXML.actualizarCuota(String.format(java.util.Locale.US, "%.2f", nuevaCuota));
+        nuevaCuota =
+                Double.parseDouble(
+                        nuevaCuotaTexto.replace(",", ".")
+                );
 
-mostrarCuotaActual();
-txtCuotaNueva.setText("");
-txtCuotaConfirmar.setText("");
+        confirmarCuota =
+                Double.parseDouble(
+                        confirmarCuotaTexto.replace(",", ".")
+                );
 
-JOptionPane.showMessageDialog(this, "Cuota actualizada correctamente.");        // TODO add your handling code here:
+    } catch (NumberFormatException e) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Solo se permiten números."
+        );
+
+        return;
+    }
+
+    // =========================================
+    // VALIDAR VALORES
+    // =========================================
+
+    if (nuevaCuota <= 0
+            || confirmarCuota <= 0) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "La cuota debe ser mayor a 0."
+        );
+
+        return;
+    }
+
+    // =========================================
+    // VALIDAR IGUALDAD
+    // =========================================
+
+    if (Double.compare(
+            nuevaCuota,
+            confirmarCuota
+    ) != 0) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Las cuotas no coinciden."
+        );
+
+        return;
+    }
+
+    // =========================================
+    // CONFIRMACIÓN
+    // =========================================
+
+    Object[] opciones = {
+        "Sí",
+        "No"
+    };
+
+    int respuesta =
+            JOptionPane.showOptionDialog(
+                    this,
+                    "¿Desea actualizar la cuota a Q. "
+                    + String.format("%.2f", nuevaCuota)
+                    + "?",
+                    "Confirmar",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]
+            );
+
+    if (respuesta != JOptionPane.YES_OPTION) {
+
+        return;
+    }
+
+    // =========================================
+    // ACTUALIZAR CUOTA EN BDXML
+    // =========================================
+
+    BDXML.actualizarCuota(
+            nuevaCuota
+    );
+
+    // =========================================
+    // ACTUALIZAR INTERFAZ
+    // =========================================
+
+    mostrarCuotaActual();
+
+    txtCuotaNueva.setText("");
+
+    txtCuotaConfirmar.setText("");
+
+    JOptionPane.showMessageDialog(
+            this,
+            "Cuota actualizada correctamente."
+    );
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtCuotaNuevaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuotaNuevaKeyTyped
