@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <residencial>
-                                                                                
+                                                                                                
+    
+    
+    
+    
     
     
     
@@ -20,7 +24,11 @@
     
     
     <casas>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -40,7 +48,11 @@
         
         
         <casa numero="1">
-                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                    
+            
+            
+            
+            
             
             
             
@@ -59,7 +71,11 @@
             
             
             <propietario>
-                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
@@ -78,7 +94,11 @@
                 
                 
                 <nombre>DIEGO</nombre>
-                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
@@ -97,7 +117,11 @@
                 
                 
                 <telefono>94849849</telefono>
-                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
@@ -116,7 +140,11 @@
                 
                 
                 <correo>25007172@galileo.edu</correo>
-                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                            
+            
+            
+            
+            
             
             
             
@@ -135,7 +163,11 @@
             
             
             </propietario>
-                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -154,7 +186,11 @@
         
         
         </casa>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -174,7 +210,11 @@
         
         
         <casa numero="2">
-                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                        
+            
+            
+            
+            
             
             
             
@@ -192,7 +232,11 @@
             
             
             <propietario>
-                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
@@ -210,7 +254,11 @@
                 
                 
                 <nombre>CARLOS</nombre>
-                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
@@ -228,7 +276,11 @@
                 
                 
                 <telefono>34949789</telefono>
-                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
@@ -246,7 +298,11 @@
                 
                 
                 <correo>FYKBEATS2022@GMAIL.COM</correo>
-                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                            
+            
+            
+            
+            
             
             
             
@@ -264,7 +320,11 @@
             
             
             </propietario>
-                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                    
+        
+        
+        
+        
         
         
         
@@ -282,7 +342,11 @@
         
         
         </casa>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -302,49 +366,77 @@
         
         
         <casa numero="3">
-                                                                                    
+                                                                                                                                    
+            
+            
+            
+            
             
             
             
             
             
             <propietario>
-                                                                                                                
+                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 
                 
                 <nombre>ALEJANDRA</nombre>
-                                                                                                                
+                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 
                 
                 <telefono>34343424</telefono>
-                                                                                                                
+                                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 
                 
                 <correo>dfloresg11@miumg.edu.gt</correo>
-                                                                                                            
+                                                                                                                                                                            
+            
+            
+            
+            
             
             
             
             
             
             </propietario>
-                                                                                
+                                                                                                                                
+        
+        
+        
+        
         
         
         
         
         
         </casa>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -364,43 +456,71 @@
         
         
         <casa numero="4">
-                                                                        
+                                                                                                                        
+            
+            
+            
+            
             
             
             
             
             <propietario>
-                                                                                                
+                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 
                 <nombre>RACHEL</nombre>
-                                                                                                
+                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 
                 <telefono>79798787</telefono>
-                                                                                                
+                                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 
                 <correo>HOLAMUNDO@.OUTLOOK.COM</correo>
-                                                                                            
+                                                                                                                                                            
+            
+            
+            
+            
             
             
             
             
             </propietario>
-                                                                    
+                                                                                                                    
+        
+        
+        
+        
         
         
         
         
         </casa>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -420,37 +540,61 @@
         
         
         <casa numero="5">
-                                                            
+                                                                                                            
+            
+            
+            
+            
             
             
             
             <propietario>
-                                                                                
+                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 <nombre>RACHEL</nombre>
-                                                                                
+                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 <telefono>79798787</telefono>
-                                                                                
+                                                                                                                                                
+                
+                
+                
+                
                 
                 
                 
                 <correo>HOLAMUNDO@OUTLOOK.COM</correo>
-                                                                            
+                                                                                                                                            
+            
+            
+            
+            
             
             
             
             </propietario>
-                                                        
+                                                                                                        
+        
+        
+        
+        
         
         
         
         </casa>
-                                                                                                                                                                
+                                                                                                                                                                                                
         
         
         
@@ -469,8 +613,40 @@
         
         
         
-        <casa numero="6"/>
-                                                                                                                                                                
+        
+        
+        
+        
+        <casa numero="6">
+                                                
+            
+            
+            <propietario>
+                                                                
+                
+                
+                <nombre>Dulce María Flores Cruz</nombre>
+                                                                
+                
+                
+                <telefono>79799789</telefono>
+                                                                
+                
+                
+                <correo>25007172@galileo.edu</correo>
+                                                            
+            
+            
+            </propietario>
+                                            
+        
+        
+        </casa>
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -490,7 +666,11 @@
         
         
         <casa numero="7"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -510,7 +690,11 @@
         
         
         <casa numero="8"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -530,7 +714,11 @@
         
         
         <casa numero="9"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -550,13 +738,41 @@
         
         
         <casa numero="10">
+                                                            
+            
+            
+            
             <propietario>
+                                                                                
+                
+                
+                
                 <nombre>HOLAHOLA</nombre>
+                                                                                
+                
+                
+                
                 <telefono>43243242</telefono>
+                                                                                
+                
+                
+                
                 <correo>HOLHOHLA@GMAIL.COM</correo>
+                                                                            
+            
+            
+            
             </propietario>
+                                                        
+        
+        
+        
         </casa>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -576,7 +792,11 @@
         
         
         <casa numero="11"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -596,7 +816,11 @@
         
         
         <casa numero="12"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -616,7 +840,11 @@
         
         
         <casa numero="13"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -636,7 +864,11 @@
         
         
         <casa numero="14"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -656,7 +888,11 @@
         
         
         <casa numero="15"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -676,7 +912,11 @@
         
         
         <casa numero="16"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -696,7 +936,11 @@
         
         
         <casa numero="17"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -716,7 +960,11 @@
         
         
         <casa numero="18"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -736,7 +984,11 @@
         
         
         <casa numero="19"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -756,7 +1008,11 @@
         
         
         <casa numero="20"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -776,7 +1032,11 @@
         
         
         <casa numero="21"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -796,7 +1056,11 @@
         
         
         <casa numero="22"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -816,7 +1080,11 @@
         
         
         <casa numero="23"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -836,7 +1104,11 @@
         
         
         <casa numero="24"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -856,7 +1128,11 @@
         
         
         <casa numero="25"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -876,7 +1152,11 @@
         
         
         <casa numero="26"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -896,7 +1176,11 @@
         
         
         <casa numero="27"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -916,7 +1200,11 @@
         
         
         <casa numero="28"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -936,7 +1224,11 @@
         
         
         <casa numero="29"/>
-                                                                                                                                                                
+                                                                                                                                                                                                
+        
+        
+        
+        
         
         
         
@@ -956,7 +1248,11 @@
         
         
         <casa numero="30"/>
-                                                                                                                                                            
+                                                                                                                                                                                            
+    
+    
+    
+    
     
     
     
@@ -976,7 +1272,11 @@
     
     
     </casas>
-                                                                                
+                                                                                                
+    
+    
+    
+    
     
     
     
@@ -996,7 +1296,529 @@
     
     
     <pagos>
-                                                                                                                                
+                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <pago>
+                                                                                                                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <casa>1</casa>
+                                                                                                                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <mes>Enero</mes>
+                                                                                                                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                                                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <cuota>500.0</cuota>
+                                                                                                                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <estado>PAGADO</estado>
+                                                                                                                                                                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </pago>
+                                                                                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <pago>
+                                                                                                                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <casa>1</casa>
+                                                                                                                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <mes>Febrero</mes>
+                                                                                                                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                                                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <cuota>500.0</cuota>
+                                                                                                                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <estado>PAGADO</estado>
+                                                                                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </pago>
+                                                                                                                                                    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <pago>
+                                                                                                                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <casa>1</casa>
+                                                                                                                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <mes>Marzo</mes>
+                                                                                                                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                                                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <cuota>500.0</cuota>
+                                                                                                                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <estado>PAGADO</estado>
+                                                                                                                                                                                                                    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </pago>
+                                                                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <pago>
+                                                                                                                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <casa>1</casa>
+                                                                                                                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <mes>Abril</mes>
+                                                                                                                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                                                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <cuota>500.0</cuota>
+                                                                                                                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <estado>PAGADO</estado>
+                                                                                                                                                                                                        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </pago>
+                                                                                                                                    
+        
         
         
         
@@ -1043,7 +1865,7 @@
             
             
             
-            <mes>Enero</mes>
+            <mes>Mayo</mes>
                                                                                                                                                                                                 
             
             
@@ -1153,7 +1975,7 @@
             
             
             
-            <mes>Febrero</mes>
+            <mes>Junio</mes>
                                                                                                                                                                                     
             
             
@@ -1256,7 +2078,7 @@
             
             
             
-            <mes>Marzo</mes>
+            <mes>Julio</mes>
                                                                                                                                                                         
             
             
@@ -1339,7 +2161,7 @@
             
             
             
-            <casa>1</casa>
+            <casa>2</casa>
                                                                                                                                                             
             
             
@@ -1352,7 +2174,7 @@
             
             
             
-            <mes>Abril</mes>
+            <mes>Enero</mes>
                                                                                                                                                             
             
             
@@ -1429,7 +2251,7 @@
             
             
             
-            <casa>1</casa>
+            <casa>2</casa>
                                                                                                                                                 
             
             
@@ -1441,7 +2263,7 @@
             
             
             
-            <mes>Mayo</mes>
+            <mes>Febrero</mes>
                                                                                                                                                 
             
             
@@ -1491,86 +2313,9 @@
         
         </pago>
                                                                                             
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        <pago>
-                                                                                                                                    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            <casa>1</casa>
-                                                                                                                                    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            <mes>Junio</mes>
-                                                                                                                                    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            <año>2026</año>
-                                                                                                                                    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            <cuota>500.0</cuota>
-                                                                                                                                    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            <estado>PAGADO</estado>
-                                                                                                                                
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        </pago>
-                                                                                    
-        
-        
+    
+    
+    
         
         
         
@@ -1579,87 +2324,15 @@
         
         
         <pago>
-                                                                                                                        
+                                                                                                
             
             
             
             
             
             
-            
-            
-            <casa>1</casa>
-                                                                                                                        
-            
-            
-            
-            
-            
-            
-            
-            
-            <mes>Julio</mes>
-                                                                                                                        
-            
-            
-            
-            
-            
-            
-            
-            
-            <año>2026</año>
-                                                                                                                        
-            
-            
-            
-            
-            
-            
-            
-            
-            <cuota>500.0</cuota>
-                                                                                                                        
-            
-            
-            
-            
-            
-            
-            
-            
-            <estado>PAGADO</estado>
-                                                                                                                    
-        
-        
-        
-        
-        
-        
-        
-        
-        </pago>
-                                                                            
-        
-        
-        
-        
-        
-        
-        
-        
-        <pago>
-                                                                                                            
-            
-            
-            
-            
-            
-            
-            
-            <casa>2</casa>
-                                                                                                            
-            
+            <casa>4</casa>
+                                                                                                
             
             
             
@@ -1667,67 +2340,6 @@
             
             
             <mes>Enero</mes>
-                                                                                                            
-            
-            
-            
-            
-            
-            
-            
-            <año>2026</año>
-                                                                                                            
-            
-            
-            
-            
-            
-            
-            
-            <cuota>500.0</cuota>
-                                                                                                            
-            
-            
-            
-            
-            
-            
-            
-            <estado>PAGADO</estado>
-                                                                                                        
-        
-        
-        
-        
-        
-        
-        
-        </pago>
-                                                                    
-        
-        
-        
-        
-        
-        
-        
-        <pago>
-                                                                                                
-            
-            
-            
-            
-            
-            
-            <casa>2</casa>
-                                                                                                
-            
-            
-            
-            
-            
-            
-            <mes>Febrero</mes>
                                                                                                 
             
             
@@ -1761,77 +2373,123 @@
         
         </pago>
                                                             
-    
-    
-    
+        
+        
+        
         
         
         
         <pago>
-                                                
+                                                                                    
             
             
-            <casa>4</casa>
-                                                
             
             
-            <mes>Enero</mes>
-                                                
-            
-            
-            <año>2026</año>
-                                                
-            
-            
-            <cuota>500.0</cuota>
-                                                
-            
-            
-            <estado>PAGADO</estado>
-                                            
-        
-        
-        </pago>
-                            
-        
-        
-        <pago>
-                                    
             
             <casa>4</casa>
-                                    
+                                                                                    
+            
+            
+            
+            
             
             <mes>Febrero</mes>
-                                    
+                                                                                    
+            
+            
+            
+            
             
             <año>2026</año>
-                                    
+                                                                                    
+            
+            
+            
+            
             
             <cuota>500.0</cuota>
-                                    
+                                                                                    
+            
+            
+            
+            
             
             <estado>PAGADO</estado>
-                                
+                                                                                
+        
+        
+        
+        
         
         </pago>
-                    
+                                                    
+        
+        
+        
+        
+        
+        <pago>
+                                                                        
+            
+            
+            
+            
+            <casa>4</casa>
+                                                                        
+            
+            
+            
+            
+            <mes>Marzo</mes>
+                                                                        
+            
+            
+            
+            
+            <año>2026</año>
+                                                                        
+            
+            
+            
+            
+            <cuota>500.0</cuota>
+                                                                        
+            
+            
+            
+            
+            <estado>PAGADO</estado>
+                                                                    
+        
+        
+        
+        
+        </pago>
+                                            
+    
+    
+    
         
         <pago>
                         
-            <casa>4</casa>
+            <casa>6</casa>
                         
-            <mes>Marzo</mes>
+            <mes>Enero</mes>
                         
             <año>2026</año>
                         
-            <cuota>500.0</cuota>
+            <cuota>1500.0</cuota>
                         
             <estado>PAGADO</estado>
                     
         </pago>
             
     </pagos>
-                                                                                
+                                                                                                
+    
+    
+    
+    
     
     
     
@@ -1851,7 +2509,7 @@
     
     
     <configuracion>
-                                                                                                                                                                
+                                                                                                                                                                                                
         
         
         
@@ -1870,8 +2528,16 @@
         
         
         
-        <cuotaActual>500.0</cuotaActual>
-                                                                                                                                                            
+        
+        
+        
+        
+        <cuotaActual>500.5</cuotaActual>
+                                                                                                                                                                                            
+    
+    
+    
+    
     
     
     
@@ -1891,7 +2557,11 @@
     
     
     </configuracion>
-                                                                            
+                                                                                            
+
+
+
+
 
 
 
