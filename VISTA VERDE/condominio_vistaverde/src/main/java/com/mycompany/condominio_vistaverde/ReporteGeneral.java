@@ -1,12 +1,10 @@
 package com.mycompany.condominio_vistaverde;
-import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class ReporteGeneral extends javax.swing.JFrame {
     
@@ -46,60 +44,261 @@ public class ReporteGeneral extends javax.swing.JFrame {
     return total;
 }
    
-    private void cargarReporteGeneral() {
-         Document doc = BDXML.obtenerDocumento();
+private void cargarReporteGeneral() {
 
-    if (doc == null) {
-        JOptionPane.showMessageDialog(this, "No se pudo cargar el archivo residencial.xml");
-        return;
-    }
+    try {
 
-    LocalDate fechaActual = LocalDate.now();
-    String mesActual = obtenerNombreMes(fechaActual.getMonthValue());
-    String anioActual = String.valueOf(fechaActual.getYear());
+        // =========================
+        // OBTENER DOCUMENTO XML
+        // =========================
 
-    double cuotaActual = Double.parseDouble(BDXML.obtenerCuotaActual());
-    double totalRecaudadoMes = calcularTotalRecaudadoMes(doc, mesActual, anioActual);
-    double totalEsperadoMes = cuotaActual * 30;
+        Document doc = BDXML.obtenerDocumento();
 
-    lblMesActual.setText("Mes Actual: " + mesActual + " " + anioActual);
+        if (doc == null) {
 
-    DefaultTableModel modelo = new DefaultTableModel(
-        new Object[]{"Número de casa", "Nombre del propietario", "Estado del mes actual", "Total pagado en el año"},
-        0
-    ) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo leer el XML.");
+
+            return;
         }
-    };
 
-    for (int i = 1; i <= 30; i++) {
-        String numeroCasa = "CASA " + i;
 
-        String propietario = obtenerPropietario(doc, numeroCasa);
-        boolean pagoMesActual = existePagoMesActual(doc, numeroCasa, mesActual, anioActual);
-        double totalPagadoAnio = calcularTotalPagadoAnio(doc, numeroCasa, anioActual);
+        LocalDate fechaActual = LocalDate.now();
 
-        String estado = pagoMesActual ? "Pagado" : "Pendiente";
+        String mesActual =
+                obtenerNombreMes(
+                        fechaActual.getMonthValue()
+                );
 
-        modelo.addRow(new Object[]{
-            numeroCasa,
-            propietario,
-            estado,
-            "Q. " + String.format("%.2f", totalPagadoAnio)
-        });
+        String añoActual =
+                String.valueOf(
+                        fechaActual.getYear()
+                );
+
+        lblMesActual.setText(
+                "Mes Actual: "
+                + mesActual
+                + " "
+                + añoActual
+        );
+
+        // =========================
+        // TABLA
+        // =========================
+
+        DefaultTableModel modelo =
+                new DefaultTableModel(
+
+                new Object[]{
+                    "Número de casa",
+                    "Propietario",
+                    "Estado actual",
+                    "Total pagado"
+                }, 0) {
+
+            @Override
+            public boolean isCellEditable(
+                    int row,
+                    int column) {
+
+                return false;
+            }
+        };
+
+        // =========================
+        // VARIABLES REPORTE
+        // =========================
+
+        double cuotaMensual =
+        BDXML.obtenerCuotaActual();
+
+        double totalEsperado =
+                cuotaMensual * 30;
+
+        double totalRecaudado = 0;
+
+        // =========================
+        // RECORRER CASAS
+        // =========================
+
+        for (int i = 1; i <= 30; i++) {
+
+            // =========================
+            // CREAR OBJETO CASA
+            // =========================
+
+            Casa casa = new Casa(i);
+
+            // =========================
+            // OBTENER PROPIETARIO
+            // =========================
+
+            String[] datos =
+        BDXML.obtenerDatosPropietario(i);
+
+            String nombrePropietario =
+                    "Sin propietario";
+
+            if (datos != null) {
+
+                Propietario propietario =
+                        new Propietario(
+                                datos[0],
+                                datos[1],
+                                datos[2],
+                                i
+                        );
+
+                casa.setPropietario(propietario);
+
+                nombrePropietario =
+                        propietario.getNombre();
+            }
+
+            // =========================
+            // VALIDAR PAGO
+            // =========================
+
+            boolean pagado =
+                    BDXML.existePago(
+        i,
+        mesActual,
+        Integer.parseInt(añoActual)
+);
+
+            String estado =
+                    pagado
+                    ? "Pagado"
+                    : "Pendiente";
+
+            // =========================
+            // CALCULAR TOTAL DEL AÑO
+            // =========================
+
+            double totalCasa = 0;
+
+            NodeList listaPagos =
+                    doc.getElementsByTagName("pago");
+
+            for (int j = 0;
+                    j < listaPagos.getLength();
+                    j++) {
+
+                Element pagoXML =
+                        (Element)
+                        listaPagos.item(j);
+
+                String casaPago =
+                        obtenerTexto(
+                                pagoXML,
+                                "casa"
+                        );
+
+                String añoPago =
+                        obtenerTexto(
+                                pagoXML,
+                                "año"
+                        );
+
+             if (casaPago.equals(String.valueOf(i))
+                        && añoPago.equals(añoActual)) {
+
+                    double monto =
+                            Double.parseDouble(
+                                    obtenerTexto(
+                                            pagoXML,
+                                            "cuota"
+                                    )
+                            );
+
+                    String mesPago =
+                            obtenerTexto(
+                                    pagoXML,
+                                    "mes"
+                            );
+
+                    // =========================
+                    // CREAR OBJETO PAGO
+                    // =========================
+
+                    Pago pago =
+                            new Pago(
+                                    mesPago,
+                                    Integer.parseInt(añoPago),
+                                    monto,
+                                    "PAGADO"
+                            );
+
+                    casa.agregarPago(pago);
+
+                    totalCasa += pago.getMonto();
+
+                    // SUMAR SOLO EL MES ACTUAL
+                    if (mesPago.equals(mesActual)) {
+                        totalRecaudado += pago.getMonto();
+                    }
+                }
+            }
+
+            // =========================
+            // AGREGAR FILA
+            // =========================
+
+            modelo.addRow(new Object[]{
+
+                "CASA " + casa.getNumero(),
+
+                nombrePropietario,
+
+                estado,
+
+                "Q. "
+                + String.format(
+                        "%.2f",
+                        totalCasa
+                )
+            });
+        }
+
+        // =========================
+        // MOSTRAR TABLA
+        // =========================
+
+        tblReporteGeneral.setModel(modelo);
+
+        tblReporteGeneral.setRowHeight(25);
+
+        // =========================
+        // RESUMEN
+        // =========================
+
+        lblResumenMes.setText(
+
+                "Recaudado este mes: Q."
+                + String.format(
+                        "%.2f",
+                        totalRecaudado
+                )
+
+                + " / Esperado: Q."
+
+                + String.format(
+                        "%.2f",
+                        totalEsperado
+                )
+        );
+
+    } catch (Exception e) {
+
+        JOptionPane.showMessageDialog(this,
+
+                "Error cargando reporte:\n"
+                + e.getMessage()
+        );
+
+        e.printStackTrace();
     }
-
-    tblReporteGeneral.setModel(modelo);
-    tblReporteGeneral.setRowHeight(25);
-
-    lblResumenMes.setText(
-        "Recaudado este mes: Q. " + String.format("%.2f", totalRecaudadoMes)
-        + " / Esperado: Q. " + String.format("%.2f", totalEsperadoMes)
-    );
-    }
-    
+}
 private String obtenerPropietario(Document doc, String casaBuscada) {
 
     NodeList listaCasas = doc.getElementsByTagName("casa");
