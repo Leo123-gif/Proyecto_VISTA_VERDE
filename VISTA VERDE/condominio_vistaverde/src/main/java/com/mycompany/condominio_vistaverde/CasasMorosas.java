@@ -45,7 +45,7 @@ public class CasasMorosas extends javax.swing.JFrame {
     );
 }
     
-private void cargarCasasMorosas() {
+   private void cargarCasasMorosas() {
 
     DefaultTableModel modelo =
             (DefaultTableModel) tblMorosos.getModel();
@@ -62,7 +62,8 @@ private void cargarCasasMorosas() {
             return;
         }
 
-        java.time.LocalDate fecha = java.time.LocalDate.now();
+        java.time.LocalDate fecha =
+                java.time.LocalDate.now();
 
         String mesActual = fecha.getMonth()
                 .getDisplayName(
@@ -73,7 +74,8 @@ private void cargarCasasMorosas() {
         mesActual = mesActual.substring(0,1).toUpperCase()
                 + mesActual.substring(1);
 
-        String añoActual = String.valueOf(fecha.getYear());
+        String añoActual =
+                String.valueOf(fecha.getYear());
 
         org.w3c.dom.NodeList listaCasas =
                 doc.getElementsByTagName("casa");
@@ -81,21 +83,55 @@ private void cargarCasasMorosas() {
         for (int i = 0; i < listaCasas.getLength(); i++) {
 
             org.w3c.dom.Element casa =
-                    (org.w3c.dom.Element) listaCasas.item(i);
+                    (org.w3c.dom.Element)
+                    listaCasas.item(i);
 
             String numeroCasa =
                     casa.getAttribute("numero");
 
+            // VALIDAR SI TIENE PROPIETARIO
+            boolean tienePropietario =
+                    casa.getElementsByTagName("propietario")
+                    .getLength() > 0;
+
+            // VALIDAR SI TIENE PAGOS
+            boolean tienePagos = false;
+
+            org.w3c.dom.NodeList listaPagos =
+                    doc.getElementsByTagName("pago");
+
+            for (int j = 0; j < listaPagos.getLength(); j++) {
+
+                org.w3c.dom.Element pago =
+                        (org.w3c.dom.Element)
+                        listaPagos.item(j);
+
+                String casaPago =
+                        pago.getElementsByTagName("casa")
+                        .item(0)
+                        .getTextContent();
+
+                if (casaPago.equals(numeroCasa)) {
+
+                    tienePagos = true;
+                    break;
+                }
+            }
+
+            // SI NO TIENE DATOS, NO MOSTRAR
+            if (!tienePropietario && !tienePagos) {
+                continue;
+            }
+
             String nombre = "Sin propietario";
             String telefono = "-";
 
-            org.w3c.dom.NodeList propietarios =
-                    casa.getElementsByTagName("propietario");
-
-            if (propietarios.getLength() > 0) {
+            if (tienePropietario) {
 
                 org.w3c.dom.Element prop =
-                        (org.w3c.dom.Element) propietarios.item(0);
+                        (org.w3c.dom.Element)
+                        casa.getElementsByTagName("propietario")
+                        .item(0);
 
                 nombre = prop.getElementsByTagName("nombre")
                         .item(0)
@@ -112,9 +148,11 @@ private void cargarCasasMorosas() {
                     añoActual
             );
 
+            // SOLO MOSTRAR SI NO PAGÓ
             if (!pagó) {
 
                 modelo.addRow(new Object[]{
+
                     numeroCasa,
                     nombre,
                     telefono,
@@ -126,7 +164,8 @@ private void cargarCasasMorosas() {
         }
 
         lblTotalMorosos.setText(
-                "Total casas morosas: " + totalMorosos
+                "Total casas morosas: "
+                + totalMorosos
         );
 
     } catch (Exception e) {
@@ -139,7 +178,7 @@ private void cargarCasasMorosas() {
 
         e.printStackTrace();
     }
-}   
+}
 
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
