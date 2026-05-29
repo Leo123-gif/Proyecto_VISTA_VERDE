@@ -1,16 +1,12 @@
 package com.mycompany.condominio_vistaverde;
 
 import javax.swing.JOptionPane;
+import java.util.Properties;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 
-/**
- *
- * @author Josue
- */
+
 public class RegistroPropietario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistroPropietario.class.getName());
@@ -183,68 +179,85 @@ public class RegistroPropietario extends javax.swing.JFrame {
     }//GEN-LAST:event_nocasasActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+// Limpiar campos de texto
+    nombrecom.setText("");
+    cellphone.setText("");
+    correo.setText("");
+    
+    // Limpiar ComboBox - regresar al primer ítem (generalmente "Seleccione" o Item 1)
+    if (nocasas.getItemCount() > 0) {
+        nocasas.setSelectedIndex(0);  // Regresa al primer elemento
+    }
+    
+    // Opcional: poner foco en el primer campo
+    nombrecom.requestFocus();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        String nombre = nombrecom.getText().trim();
-        String casa = nocasas.getSelectedItem().toString();
-        String tel = cellphone.getText().trim();
-        String mail = correo.getText().trim();
+String nombre = nombrecom.getText().trim();
+    String casaStr = nocasas.getSelectedItem().toString();
+    String tel = cellphone.getText().trim();
+    String mail = correo.getText().trim();
 
-        // Validar que se seleccione una casa real
-        if (casa.equals("Seleccione una casa")) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un número de casa.");
-            nocasas.requestFocus();
-            return;
+    // Validaciones iniciales
+    if (casaStr.equals("Seleccione una casa")) {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar un número de casa.");
+        return;
+    }
+
+    if (nombre.isEmpty() || tel.isEmpty() || mail.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+        return;
+    }
+
+    // PEGA ESTO AQUÍ
+    if (!validarCorreo(mail)) {
+        JOptionPane.showMessageDialog(this, "Correo inválido.");
+        return;
+    }
+
+    // Crear objeto propietario
+    int numCasa = Integer.parseInt(casaStr);
+
+    Propietario nuevoPropietario = new Propietario(
+        nombre,
+        tel,
+        mail,
+        numCasa
+    );
+
+    new Thread(() -> {
+        try {
+
+            BDXML.registrarPropietario(nuevoPropietario);
+
+            enviarCorreoVerificacion(
+                nuevoPropietario.getCorreo(),
+                nuevoPropietario.getNombre()
+            );
+
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Registro exitoso de: " + nuevoPropietario.getNombre()
+                );
+
+                limpiarCampos();
+            });
+
+        } catch (Exception e) {
+
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Error: " + e.getMessage()
+                );
+            });
         }
 
-        // Validar campos vacíos
-        if (nombre.isEmpty() || tel.isEmpty() || mail.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
-            return;
-        }
+    }).start();   
 
-        // Validar teléfono de 8 dígitos
-        if (tel.length() != 8) {
-            JOptionPane.showMessageDialog(this, "El número de teléfono debe tener exactamente 8 dígitos.");
-            cellphone.requestFocus();
-            return;
-        }
 
-        // Validar teléfono solo numérico
-        if (!tel.matches("[0-9]+")) {
-            JOptionPane.showMessageDialog(this, "El número de teléfono solo debe contener números.");
-            cellphone.requestFocus();
-            return;
-        }
-
-        // Validar correo con @ y .
-        if (!mail.contains("@") || !mail.contains(".")) {
-            JOptionPane.showMessageDialog(this, "El correo electrónico debe contener @ y punto.");
-            correo.requestFocus();
-            return;
-        }
-
-        new Thread(() -> {
-            try {
-                BDXML.registrarPropietario(casa, nombre, tel, mail);
-
-                enviarCorreoVerificacion(mail, nombre);
-
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(this, "Registro exitoso. Se ha enviado un correo a " + mail);
-                    limpiarCampos();
-                });
-
-            } catch (Exception e) {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(this, e.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
-                });
-            }
-
-        }).start();
     }
 
 // Método de apoyo para limpiar
