@@ -32,13 +32,63 @@ public class EstadoCuentaPorCasas extends javax.swing.JFrame {
     }
     
     
-    private void cargarCasas(){
+    private void cargarCasas() {
 
     cmbCasa.removeAllItems();
 
-    for(int i = 1; i <= 30; i++){
+    Document doc = BDXML.obtenerDocumento();
 
-        cmbCasa.addItem(String.valueOf(i));
+    java.util.HashSet<String> casasAgregadas =
+            new java.util.HashSet<>();
+
+    // --- CASAS CON PROPIETARIO ---
+    NodeList listaCasas = doc.getElementsByTagName("casa");
+
+    for (int i = 0; i < listaCasas.getLength(); i++) {
+
+        Element casa = (Element) listaCasas.item(i);
+
+        String numeroCasa =
+                casa.getAttribute("numero");
+
+        NodeList propietarios =
+                casa.getElementsByTagName("propietario");
+
+        if (propietarios.getLength() > 0) {
+
+            String numeroLimpio =
+                    numeroCasa.replace("CASA ", "");
+
+            cmbCasa.addItem(numeroLimpio);
+
+            casasAgregadas.add(numeroCasa);
+        }
+    }
+
+    // --- CASAS CON PAGOS ---
+    NodeList listaPagos =
+            doc.getElementsByTagName("pago");
+
+    for (int i = 0; i < listaPagos.getLength(); i++) {
+
+        Element pago =
+                (Element) listaPagos.item(i);
+
+        String casaPago =
+                pago.getElementsByTagName("casa")
+                .item(0)
+                .getTextContent();
+
+        // Evita duplicados
+        if (!casasAgregadas.contains(casaPago)) {
+
+            String numeroLimpio =
+                    casaPago.replace("CASA ", "");
+
+            cmbCasa.addItem(numeroLimpio);
+
+            casasAgregadas.add(casaPago);
+        }
     }
 }
 
