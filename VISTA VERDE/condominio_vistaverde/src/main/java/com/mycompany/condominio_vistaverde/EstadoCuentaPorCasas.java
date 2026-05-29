@@ -328,7 +328,7 @@ private void configurarTablas(){
         Element casa = (Element) listaCasas.item(i);
         
         // El número está en el atributo "numero" según el BDXML.registrarPropietario
-        if (casa.getAttribute("numero").equals(casaFormatoXML)) {
+      if (casa.getAttribute("numero").equals(casaSeleccionada)) {
             NodeList propietarios = casa.getElementsByTagName("propietario");
             if (propietarios.getLength() > 0) {
                 Element prop = (Element) propietarios.item(0);
