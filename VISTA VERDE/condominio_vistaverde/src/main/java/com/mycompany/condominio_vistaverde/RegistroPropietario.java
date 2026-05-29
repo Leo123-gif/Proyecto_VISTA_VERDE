@@ -187,37 +187,65 @@ public class RegistroPropietario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String nombre = nombrecom.getText().trim();
+        String nombre = nombrecom.getText().trim();
     String casa = nocasas.getSelectedItem().toString();
     String tel = cellphone.getText().trim();
     String mail = correo.getText().trim();
 
+    // Validar campos vacíos
     if (nombre.isEmpty() || tel.isEmpty() || mail.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
         return;
     }
 
+    // Validar selección de casa
+    if (casa.equals("Seleccione una casa")) {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar un número de casa.");
+        return;
+    }
+
+    // Validar que el teléfono tenga exactamente 8 dígitos
+    if (tel.length() != 8) {
+        JOptionPane.showMessageDialog(this, "El número de teléfono debe tener exactamente 8 dígitos.");
+        cellphone.requestFocus();
+        return;
+    }
+
+    // Validar que el teléfono solo tenga números
+    if (!tel.matches("[0-9]+")) {
+        JOptionPane.showMessageDialog(this, "El número de teléfono solo debe contener números.");
+        cellphone.requestFocus();
+        return;
+    }
+
+    // Validar correo electrónico: debe tener @ y .
+    if (!mail.contains("@") || !mail.contains(".")) {
+        JOptionPane.showMessageDialog(this, "El correo electrónico debe contener @ y punto.");
+        correo.requestFocus();
+        return;
+    }
+
     new Thread(() -> {
         try {
-            // 1. Primero intentamos registrar en XML (Esto valida si la casa está libre)
+            // 1. Primero intentamos registrar en XML
+            // Esto valida si la casa está libre
             BDXML.registrarPropietario(casa, nombre, tel, mail);
-            
+
             // 2. Si el registro XML fue exitoso, enviamos el correo
             enviarCorreoVerificacion(mail, nombre);
-            
+
             javax.swing.SwingUtilities.invokeLater(() -> {
                 JOptionPane.showMessageDialog(this, "Registro exitoso. Se ha enviado un correo a " + mail);
                 limpiarCampos();
             });
-            
+
         } catch (Exception e) {
-            // Aquí atrapamos tanto el error de "Casa ocupada" como el de "Correo inválido"
             javax.swing.SwingUtilities.invokeLater(() -> {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
             });
         }
-    }).start();
-}
+        }).start();
+    }
 
 // Método de apoyo para limpiar
 private void limpiarCampos() {
