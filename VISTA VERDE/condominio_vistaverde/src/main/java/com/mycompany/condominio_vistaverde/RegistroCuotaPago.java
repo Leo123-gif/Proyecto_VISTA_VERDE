@@ -166,12 +166,10 @@ cmbAño.addItem("Seleccionar");
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel2.setText("MES");
 
-        cmbMes.setBackground(new java.awt.Color(0, 51, 51));
         cmbMes.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbMes.addActionListener(this::cmbMesActionPerformed);
 
-        cmbAño.setBackground(new java.awt.Color(0, 51, 51));
         cmbAño.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         cmbAño.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbAño.addActionListener(this::cmbAñoActionPerformed);
@@ -182,14 +180,12 @@ cmbAño.addItem("Seleccionar");
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel4.setText("CUOTA");
 
-        btnPago.setBackground(new java.awt.Color(0, 0, 51));
         btnPago.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         btnPago.setText("APLICAR PAGO");
         btnPago.addActionListener(this::btnPagoActionPerformed);
 
         txtCuota.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
 
-        cmbCasas.setBackground(new java.awt.Color(0, 51, 51));
         cmbCasas.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         cmbCasas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbCasas.addActionListener(this::cmbCasasActionPerformed);
@@ -250,7 +246,6 @@ cmbAño.addItem("Seleccionar");
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
         jLabel5.setText("REGISTRO CUOTA PAGO");
 
-        jButton2.setBackground(new java.awt.Color(0, 0, 51));
         jButton2.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jButton2.setText("MENU");
         jButton2.addActionListener(this::jButton2ActionPerformed);

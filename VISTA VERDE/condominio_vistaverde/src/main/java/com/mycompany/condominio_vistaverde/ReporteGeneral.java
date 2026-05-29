@@ -450,7 +450,6 @@ private String obtenerPropietario(Document doc, String casaBuscada) {
         lblMesActual.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblMesActual.setText("Mes Actual: Mayo 2026");
 
-        btnVolvermenu.setBackground(new java.awt.Color(0, 0, 51));
         btnVolvermenu.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnVolvermenu.setText("MENU");
         btnVolvermenu.addActionListener(this::btnVolvermenuActionPerformed);

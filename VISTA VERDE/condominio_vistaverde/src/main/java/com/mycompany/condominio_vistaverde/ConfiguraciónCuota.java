@@ -93,7 +93,6 @@ private void mostrarCuotaActual() {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 51));
         jButton1.setText("CAMBIAR CUOTA");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
@@ -163,7 +162,6 @@ private void mostrarCuotaActual() {
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
         jLabel4.setText("CONFIGURACIÓN CUOTA");
 
-        jButton2.setBackground(new java.awt.Color(0, 0, 51));
         jButton2.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jButton2.setText("MENU");
         jButton2.addActionListener(this::jButton2ActionPerformed);
