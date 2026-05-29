@@ -229,7 +229,21 @@ String nombre = nombrecom.getText().trim();
     new Thread(() -> {
         try {
 
-            BDXML.registrarPropietario(nuevoPropietario);
+          boolean registrado =
+        BDXML.registrarPropietario(nuevoPropietario);
+
+if (!registrado) {
+
+    javax.swing.SwingUtilities.invokeLater(() -> {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Esta casa ya tiene un propietario registrado."
+        );
+    });
+
+    return;
+}
 
             enviarCorreoVerificacion(
                 nuevoPropietario.getCorreo(),

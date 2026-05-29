@@ -70,48 +70,66 @@ public class BDXML {
     }
 
     // --- MÉTODOS PARA PROPIETARIOS ---
+public static boolean registrarPropietario(Propietario p) {
 
-    public static void registrarPropietario(Propietario p) {
-        try {
-            Document doc = obtenerDocumento();
-            NodeList listaCasas = doc.getElementsByTagName("casa");
+    try {
 
-            for (int i = 0; i < listaCasas.getLength(); i++) {
-                Element casaElem = (Element) listaCasas.item(i);
-                
-                // Buscamos la casa por su atributo "numero"
-                if (casaElem.getAttribute("numero").equals(String.valueOf(p.getNumeroCasa()))) {
-                    
-                    // Limpiar propietario anterior si existe
-                    NodeList viejos = casaElem.getElementsByTagName("propietario");
-                    while (viejos.getLength() > 0) {
-                        casaElem.removeChild(viejos.item(0));
-                    }
+        Document doc = obtenerDocumento();
 
-                    Element nuevoProp = doc.createElement("propietario");
-                    
-                    Element nom = doc.createElement("nombre");
-                    nom.setTextContent(p.getNombre());
-                    
-                    Element tel = doc.createElement("telefono");
-                    tel.setTextContent(p.getTelefono());
-                    
-                    Element cor = doc.createElement("correo");
-                    cor.setTextContent(p.getCorreo());
+        NodeList listaCasas = doc.getElementsByTagName("casa");
 
-                    nuevoProp.appendChild(nom);
-                    nuevoProp.appendChild(tel);
-                    nuevoProp.appendChild(cor);
-                    casaElem.appendChild(nuevoProp);
-                    break;
+        for (int i = 0; i < listaCasas.getLength(); i++) {
+
+            Element casaElem = (Element) listaCasas.item(i);
+
+            // Buscar la casa por número
+            if (casaElem.getAttribute("numero")
+                    .equals(String.valueOf(p.getNumeroCasa()))) {
+
+                // VERIFICAR SI YA EXISTE PROPIETARIO
+                NodeList propietarios =
+                        casaElem.getElementsByTagName("propietario");
+
+                if (propietarios.getLength() > 0) {
+
+                    // Ya existe un propietario
+                    return false;
                 }
+
+                // Crear nuevo propietario
+                Element nuevoProp = doc.createElement("propietario");
+
+                Element nom = doc.createElement("nombre");
+                nom.setTextContent(p.getNombre());
+
+                Element tel = doc.createElement("telefono");
+                tel.setTextContent(p.getTelefono());
+
+                Element cor = doc.createElement("correo");
+                cor.setTextContent(p.getCorreo());
+
+                nuevoProp.appendChild(nom);
+                nuevoProp.appendChild(tel);
+                nuevoProp.appendChild(cor);
+
+                casaElem.appendChild(nuevoProp);
+
+                guardarDocumento(doc);
+
+                return true;
             }
-            guardarDocumento(doc);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al registrar propietario: " + e.getMessage());
         }
+
+    } catch (Exception e) {
+
+        JOptionPane.showMessageDialog(
+                null,
+                "Error al registrar propietario: " + e.getMessage()
+        );
     }
 
+    return false;
+}
     public static String[] obtenerDatosPropietario(String casaBuscada) {
         try {
             Document doc = obtenerDocumento();
