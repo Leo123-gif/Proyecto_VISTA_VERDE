@@ -49,9 +49,9 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="cmbCasas" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
@@ -74,26 +74,18 @@
                                   <Component id="cmbAño" min="-2" pref="127" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="161" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" pref="104" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
-                          <Component id="btnPago" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel4" min="-2" pref="77" max="-2" attributes="0"/>
                               <Component id="txtCuota" min="-2" pref="140" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="303" max="-2" attributes="0"/>
+                          <Component id="btnPago" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="60" max="32767" attributes="0"/>
+                  <EmptySpace pref="75" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -114,12 +106,9 @@
                       <Component id="cmbCasas" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
                       <Component id="txtCuota" min="-2" pref="52" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="59" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="btnPago" pref="56" max="32767" attributes="0"/>
-                      <Component id="jButton1" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <EmptySpace pref="65" max="32767" attributes="0"/>
+                  <Component id="btnPago" min="-2" pref="56" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -249,14 +238,6 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton1"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>
