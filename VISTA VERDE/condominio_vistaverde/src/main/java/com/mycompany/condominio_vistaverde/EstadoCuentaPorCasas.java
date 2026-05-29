@@ -31,67 +31,23 @@ public class EstadoCuentaPorCasas extends javax.swing.JFrame {
     
     }
     
-    
-    private void cargarCasas() {
+private void cargarCasas() {
 
     cmbCasa.removeAllItems();
 
-    Document doc = BDXML.obtenerDocumento();
+    for (Casa casa : BDXML.obtenerCasas()) {
 
-    java.util.HashSet<String> casasAgregadas =
-            new java.util.HashSet<>();
+        if (casa.getPropietario() != null) {
 
-    // --- CASAS CON PROPIETARIO ---
-    NodeList listaCasas = doc.getElementsByTagName("casa");
-
-    for (int i = 0; i < listaCasas.getLength(); i++) {
-
-        Element casa = (Element) listaCasas.item(i);
-
-        String numeroCasa =
-                casa.getAttribute("numero");
-
-        NodeList propietarios =
-                casa.getElementsByTagName("propietario");
-
-        if (propietarios.getLength() > 0) {
-
-            String numeroLimpio =
-                    numeroCasa.replace("CASA ", "");
-
-            cmbCasa.addItem(numeroLimpio);
-
-            casasAgregadas.add(numeroCasa);
-        }
-    }
-
-    // --- CASAS CON PAGOS ---
-    NodeList listaPagos =
-            doc.getElementsByTagName("pago");
-
-    for (int i = 0; i < listaPagos.getLength(); i++) {
-
-        Element pago =
-                (Element) listaPagos.item(i);
-
-        String casaPago =
-                pago.getElementsByTagName("casa")
-                .item(0)
-                .getTextContent();
-
-        // Evita duplicados
-        if (!casasAgregadas.contains(casaPago)) {
-
-            String numeroLimpio =
-                    casaPago.replace("CASA ", "");
-
-            cmbCasa.addItem(numeroLimpio);
-
-            casasAgregadas.add(casaPago);
+            cmbCasa.addItem(
+                    String.valueOf(
+                            casa.getNumero()
+                    )
+            );
         }
     }
 }
-
+    
 private void configurarTablas(){
 
     DefaultTableModel modeloPagados =
@@ -306,89 +262,136 @@ private void configurarTablas(){
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-     String casaSeleccionada = cmbCasa.getSelectedItem().toString(); // Ej: "1"
-    String casaFormatoXML = "CASA " + casaSeleccionada; // Ej: "CASA 1"
+   
+     if (cmbCasa.getSelectedItem() == null) {
 
-    Document doc = BDXML.obtenerDocumento();
+        return;
+    }
 
-    // MODELOS DE TABLA
-    DefaultTableModel modeloPagados = (DefaultTableModel) tblPagados.getModel();
-    DefaultTableModel modeloPendientes = (DefaultTableModel) tblPendientes.getModel();
+    int numeroCasa =
+            Integer.parseInt(
+                    cmbCasa.getSelectedItem().toString()
+            );
+
+    // =========================================
+    // OBTENER CASA COMPLETA DESDE BDXML
+    // =========================================
+
+    Casa casa =
+            BDXML.obtenerCasa(numeroCasa);
+
+    // =========================================
+    // MODELOS
+    // =========================================
+
+    DefaultTableModel modeloPagados =
+            (DefaultTableModel) tblPagados.getModel();
+
+    DefaultTableModel modeloPendientes =
+            (DefaultTableModel) tblPendientes.getModel();
 
     modeloPagados.setRowCount(0);
     modeloPendientes.setRowCount(0);
 
-    // LIMPIAR CAMPOS
-    txtPropietario.setText("");
-    txtTotal.setText("");
+    // =========================================
+    // PROPIETARIO
+    // =========================================
 
-    // --- 1. BUSCAR NOMBRE DEL DUEÑO ---
-    NodeList listaCasas = doc.getElementsByTagName("casa");
-    for (int i = 0; i < listaCasas.getLength(); i++) {
-        Element casa = (Element) listaCasas.item(i);
-        
-        // El número está en el atributo "numero" según el BDXML.registrarPropietario
-      if (casa.getAttribute("numero").equals(casaSeleccionada)) {
-            NodeList propietarios = casa.getElementsByTagName("propietario");
-            if (propietarios.getLength() > 0) {
-                Element prop = (Element) propietarios.item(0);
-                String nombre = prop.getElementsByTagName("nombre").item(0).getTextContent();
-                txtPropietario.setText(nombre);
-            } else {
-                txtPropietario.setText("Sin propietario");
-            }
-            break;
-        }
+    if (casa.getPropietario() != null) {
+
+        txtPropietario.setText(
+                casa.getPropietario().getNombre()
+        );
+
+    } else {
+
+        txtPropietario.setText(
+                "Sin propietario"
+        );
     }
 
-    // --- 2. LOGICA DE MESES PAGADOS ---
+    // =========================================
+    // MESES
+    // =========================================
+
     String[] meses = {
-        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
     };
 
-    boolean[] pagados = new boolean[12];
-    double totalRecaudado = 0;
+    boolean[] pagados =
+            new boolean[12];
 
-    NodeList listaPagos = doc.getElementsByTagName("pago");
+    double totalPagado = 0;
 
-    for (int i = 0; i < listaPagos.getLength(); i++) {
-        Element pago = (Element) listaPagos.item(i);
-        
-        // Obtenemos el texto del tag <casa> dentro de <pago>
-        String casaXML = pago.getElementsByTagName("casa").item(0).getTextContent();
+    // =========================================
+    // RECORRER PAGOS
+    // =========================================
 
-        if (casaXML.equals(casaFormatoXML)) {
-            String mes = pago.getElementsByTagName("mes").item(0).getTextContent();
-            String año = pago.getElementsByTagName("año").item(0).getTextContent();
-            String cuota = pago.getElementsByTagName("cuota").item(0).getTextContent();
+    for (Pago pago : casa.getPagos()) {
 
-            // Marcar como pagado para la tabla de pendientes
-            for (int j = 0; j < meses.length; j++) {
-                if (meses[j].equalsIgnoreCase(mes)) {
-                    pagados[j] = true;
-                    break;
-                }
-            }
+        modeloPagados.addRow(new Object[]{
 
-            modeloPagados.addRow(new Object[]{mes, año});
-            
-            try {
-                totalRecaudado += Double.parseDouble(cuota);
-            } catch (NumberFormatException e) {
-                System.out.println("Error en cuota: " + cuota);
+            pago.getMes(),
+            pago.getAño()
+        });
+
+        totalPagado += pago.getMonto();
+
+        for (int i = 0; i < meses.length; i++) {
+
+            if (meses[i].equalsIgnoreCase(
+                    pago.getMes()
+            )) {
+
+                pagados[i] = true;
             }
         }
     }
 
-    // --- 3. LOGICA DE MESES PENDIENTES ---
+    // =========================================
+    // MESES PENDIENTES
+    // =========================================
+
+    int añoActual =
+            java.time.LocalDate.now().getYear();
+
     for (int i = 0; i < meses.length; i++) {
+
         if (!pagados[i]) {
-            modeloPendientes.addRow(new Object[]{meses[i], "2026"});
+
+            modeloPendientes.addRow(new Object[]{
+
+                meses[i],
+                añoActual
+            });
         }
     }
 
-    txtTotal.setText("Q. " + String.format("%.2f", totalRecaudado));
+    // =========================================
+    // TOTAL
+    // =========================================
+
+    txtTotal.setText(
+
+            "Q. "
+            + String.format(
+                    "%.2f",
+                    totalPagado
+            )
+    );
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**

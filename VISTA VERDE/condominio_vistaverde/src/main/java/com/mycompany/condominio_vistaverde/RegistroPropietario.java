@@ -81,6 +81,7 @@ public class RegistroPropietario extends javax.swing.JFrame {
         nocasas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         nocasas.addActionListener(this::nocasasActionPerformed);
 
+        cellphone.addActionListener(this::cellphoneActionPerformed);
         cellphone.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 cellphoneKeyTyped(evt);
@@ -199,24 +200,33 @@ String nombre = nombrecom.getText().trim();
     String tel = cellphone.getText().trim();
     String mail = correo.getText().trim();
 
-    // Validaciones iniciales
+    // 1. Validaciones iniciales de selección
     if (casaStr.equals("Seleccione una casa")) {
         JOptionPane.showMessageDialog(this, "Debe seleccionar un número de casa.");
         return;
     }
 
+    // 2. Validar que no haya campos vacíos
     if (nombre.isEmpty() || tel.isEmpty() || mail.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
         return;
     }
 
-    // PEGA ESTO AQUÍ
+    // 3. VALIDACIÓN DE LOS 8 DÍGITOS (AQUÍ ES DONDE SE EXIGE)
+    if (tel.length() != 8) {
+        JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 8 dígitos.");
+        cellphone.requestFocus(); // Esto pone el cursor en el campo del teléfono
+        return; // Esto detiene el proceso y NO guarda nada
+    }
+
+    // 4. Validar formato de correo
     if (!validarCorreo(mail)) {
         JOptionPane.showMessageDialog(this, "Correo inválido.");
         return;
     }
 
-    // Crear objeto propietario
+    // --- Si llega aquí, significa que el teléfono tiene 8 números y todo está bien ---
+
     int numCasa = Integer.parseInt(casaStr);
 
     Propietario nuevoPropietario = new Propietario(
@@ -228,22 +238,17 @@ String nombre = nombrecom.getText().trim();
 
     new Thread(() -> {
         try {
+            boolean registrado = BDXML.registrarPropietario(nuevoPropietario);
 
-          boolean registrado =
-        BDXML.registrarPropietario(nuevoPropietario);
-
-if (!registrado) {
-
-    javax.swing.SwingUtilities.invokeLater(() -> {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Esta casa ya tiene un propietario registrado."
-        );
-    });
-
-    return;
-}
+            if (!registrado) {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Esta casa ya tiene un propietario registrado."
+                    );
+                });
+                return;
+            }
 
             enviarCorreoVerificacion(
                 nuevoPropietario.getCorreo(),
@@ -255,12 +260,10 @@ if (!registrado) {
                     this,
                     "Registro exitoso de: " + nuevoPropietario.getNombre()
                 );
-
                 limpiarCampos();
             });
 
         } catch (Exception e) {
-
             javax.swing.SwingUtilities.invokeLater(() -> {
                 JOptionPane.showMessageDialog(
                     this,
@@ -268,10 +271,7 @@ if (!registrado) {
                 );
             });
         }
-
-    }).start();   
-
-
+    }).start();
     }
 
 // Método de apoyo para limpiar
@@ -283,28 +283,36 @@ private void limpiarCampos() {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cellphoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cellphoneKeyTyped
-        char c = evt.getKeyChar();
+      char c = evt.getKeyChar();
 
-        if (!Character.isDigit(c)) {
-            evt.consume();
-            JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números.");
-            return;
-        }
+    // 1. Validar que solo sean números
+    if (!Character.isDigit(c)) {
+        evt.consume();
+        JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números.");
+        return;
+    }
 
-        if (cellphone.getText().length() >= 8) {
-            evt.consume();
-            JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 8 dígitos.");
-        }       // TODO add your handling code here:
+    // 2. Limitar a máximo 8 caracteres
+    // Usamos >= 8 porque el evento ocurre ANTES de que el octavo caracter se escriba
+    if (cellphone.getText().length() >= 8) {
+        evt.consume();
+        JOptionPane.showMessageDialog(this, "El teléfono no puede tener más de 8 dígitos.");
+    } // TODO add your handling code here:
     }//GEN-LAST:event_cellphoneKeyTyped
 
     private void nombrecomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombrecomKeyTyped
-         char c = evt.getKeyChar();
+      char c = evt.getKeyChar();
 
-        if (Character.isDigit(c)) {
-            evt.consume();
-            JOptionPane.showMessageDialog(this, "El nombre no puede contener números.");
-        }        // TODO add your handling code here:
+    // Validar que no entren números en el nombre
+    if (Character.isDigit(c)) {
+        evt.consume();
+        JOptionPane.showMessageDialog(this, "El nombre no puede contener números.");
+    }  // TODO add your handling code here:
     }//GEN-LAST:event_nombrecomKeyTyped
+
+    private void cellphoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cellphoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cellphoneActionPerformed
 
     /**
      * @param args the command line arguments

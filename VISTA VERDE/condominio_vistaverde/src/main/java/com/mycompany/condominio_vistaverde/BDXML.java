@@ -1,4 +1,4 @@
-package com.mycompany.condominio_vistaverde;
+ package com.mycompany.condominio_vistaverde;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -349,54 +349,7 @@ public class BDXML {
         return null;
     }
 
-    public static boolean eliminarPropietario(
-            int numeroCasa
-    ) {
-
-        try {
-
-            Document doc =
-                    obtenerDocumento();
-
-            NodeList listaCasas =
-                    doc.getElementsByTagName("casa");
-
-            for (int i = 0; i < listaCasas.getLength(); i++) {
-
-                Element casaElem =
-                        (Element) listaCasas.item(i);
-
-                if (casaElem.getAttribute("numero")
-                        .equals(
-                                String.valueOf(numeroCasa)
-                        )) {
-
-                    NodeList propietarios =
-                            casaElem.getElementsByTagName(
-                                    "propietario"
-                            );
-
-                    if (propietarios.getLength() > 0) {
-
-                        casaElem.removeChild(
-                                propietarios.item(0)
-                        );
-
-                        guardarDocumento(doc);
-
-                        return true;
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
+    
     // =====================================================
     // CASAS
     // =====================================================
