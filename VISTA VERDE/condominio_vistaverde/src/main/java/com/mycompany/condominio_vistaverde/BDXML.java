@@ -1,22 +1,17 @@
 package com.mycompany.condominio_vistaverde;
 
 import java.io.File;
-import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class BDXML {
 
@@ -33,7 +28,15 @@ public class BDXML {
                 Element raiz = doc.createElement("residencial");
                 doc.appendChild(raiz);
 
-                raiz.appendChild(doc.createElement("casas"));
+                // Crear sección de casas e inicializar las 30 casas
+                Element casasRaiz = doc.createElement("casas");
+                for (int i = 1; i <= 30; i++) {
+                    Element casa = doc.createElement("casa");
+                    casa.setAttribute("numero", String.valueOf(i));
+                    casasRaiz.appendChild(casa);
+                }
+                raiz.appendChild(casasRaiz);
+
                 raiz.appendChild(doc.createElement("pagos"));
 
                 Element configuracion = doc.createElement("configuracion");
@@ -48,7 +51,6 @@ public class BDXML {
             return builder.parse(archivo);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al obtener XML: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
@@ -58,220 +60,179 @@ public class BDXML {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(RUTA));
             transformer.transform(source, result);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al guardar XML: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error al guardar: " + e.getMessage());
         }
     }
 
-    // ==================== REGISTRAR PROPIETARIO (ÚNICO MÉTODO) ====================
-    public static void registrarPropietario(String numCasa, String nombre, String telefono, String correo) throws Exception {
+    // --- MÉTODOS PARA PROPIETARIOS ---
+public static boolean registrarPropietario(Propietario p) {
+
+    try {
+
         Document doc = obtenerDocumento();
-        if (doc == null) throw new Exception("No se pudo cargar el documento XML");
 
-        // Obtener o crear <casas>
-        Element casasRaiz;
-        NodeList listaNodosCasas = doc.getElementsByTagName("casas");
-        if (listaNodosCasas.getLength() > 0) {
-            casasRaiz = (Element) listaNodosCasas.item(0);
-        } else {
-            casasRaiz = doc.createElement("casas");
-            doc.getDocumentElement().appendChild(casasRaiz);
-        }
-
-        // Normalizar nombre de casa
-        String casaFormateada = numCasa.trim().startsWith("CASA") ? numCasa.trim() : "CASA " + numCasa.trim();
-
-        // Verificar si ya existe propietario
         NodeList listaCasas = doc.getElementsByTagName("casa");
+
         for (int i = 0; i < listaCasas.getLength(); i++) {
-            Element c = (Element) listaCasas.item(i);
-            if (c.getAttribute("numero").equals(casaFormateada)) {
-                if (c.getElementsByTagName("propietario").getLength() > 0) {
-                    throw new Exception("La casa " + casaFormateada + " ya tiene un propietario asignado.");
+
+            Element casaElem = (Element) listaCasas.item(i);
+
+            // Buscar la casa por número
+            if (casaElem.getAttribute("numero")
+                    .equals(String.valueOf(p.getNumeroCasa()))) {
+
+                // VERIFICAR SI YA EXISTE PROPIETARIO
+                NodeList propietarios =
+                        casaElem.getElementsByTagName("propietario");
+
+                if (propietarios.getLength() > 0) {
+
+                    // Ya existe un propietario
+                    return false;
                 }
-                casasRaiz.removeChild(c);
-                break;
+
+                // Crear nuevo propietario
+                Element nuevoProp = doc.createElement("propietario");
+
+                Element nom = doc.createElement("nombre");
+                nom.setTextContent(p.getNombre());
+
+                Element tel = doc.createElement("telefono");
+                tel.setTextContent(p.getTelefono());
+
+                Element cor = doc.createElement("correo");
+                cor.setTextContent(p.getCorreo());
+
+                nuevoProp.appendChild(nom);
+                nuevoProp.appendChild(tel);
+                nuevoProp.appendChild(cor);
+
+                casaElem.appendChild(nuevoProp);
+
+                guardarDocumento(doc);
+
+                return true;
             }
         }
 
-        // Crear nueva casa con propietario
-        Element nuevaCasa = doc.createElement("casa");
-        nuevaCasa.setAttribute("numero", casaFormateada);
+    } catch (Exception e) {
 
-        Element prop = doc.createElement("propietario");
-
-        Element elNombre = doc.createElement("nombre");
-        elNombre.setTextContent(nombre);
-
-        Element elTel = doc.createElement("telefono");
-        elTel.setTextContent(telefono);
-
-        Element elCorreo = doc.createElement("correo");
-        elCorreo.setTextContent(correo);
-
-        prop.appendChild(elNombre);
-        prop.appendChild(elTel);
-        prop.appendChild(elCorreo);
-
-        nuevaCasa.appendChild(prop);
-        casasRaiz.appendChild(nuevaCasa);
-
-        guardarDocumento(doc);
+        JOptionPane.showMessageDialog(
+                null,
+                "Error al registrar propietario: " + e.getMessage()
+        );
     }
+
+    return false;
+}
+    public static String[] obtenerDatosPropietario(String casaBuscada) {
+        try {
+            Document doc = obtenerDocumento();
+            if (doc == null) return null;
+
+            // Extraer solo el número si viene como "CASA 1"
+            String soloNumero = casaBuscada.replace("CASA", "").trim();
+            NodeList listaCasas = doc.getElementsByTagName("casa");
+
+            for (int i = 0; i < listaCasas.getLength(); i++) {
+                Element casaElem = (Element) listaCasas.item(i);
+                if (casaElem.getAttribute("numero").equals(soloNumero)) {
+                    NodeList listaProp = casaElem.getElementsByTagName("propietario");
+                    if (listaProp.getLength() > 0) {
+                        Element prop = (Element) listaProp.item(0);
+                        return new String[]{
+                            prop.getElementsByTagName("nombre").item(0).getTextContent(),
+                            prop.getElementsByTagName("telefono").item(0).getTextContent(),
+                            prop.getElementsByTagName("correo").item(0).getTextContent()
+                        };
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // --- MÉTODOS PARA PAGOS ---
 
     public static boolean existePago(String casa, String mes, String año) {
         try {
             Document doc = obtenerDocumento();
-            if (doc == null) return false;
-
             NodeList listaPagos = doc.getElementsByTagName("pago");
             for (int i = 0; i < listaPagos.getLength(); i++) {
                 Element pago = (Element) listaPagos.item(i);
-
-                String casaXML = pago.getElementsByTagName("casa").item(0).getTextContent().trim();
-                String mesXML = pago.getElementsByTagName("mes").item(0).getTextContent().trim();
-                String añoXML = pago.getElementsByTagName("año").item(0).getTextContent().trim();
-
-                if (casaXML.equals(casa) && mesXML.equals(mes) && añoXML.equals(año)) {
+                if (pago.getElementsByTagName("casa").item(0).getTextContent().equals(casa) &&
+                    pago.getElementsByTagName("mes").item(0).getTextContent().equals(mes) &&
+                    pago.getElementsByTagName("año").item(0).getTextContent().equals(año)) {
                     return true;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         return false;
     }
+
+    public static void registrarPago(String casa, String mes, String año, String cuota) {
+        try {
+            Document doc = obtenerDocumento();
+            Element pagosRaiz = (Element) doc.getElementsByTagName("pagos").item(0);
+
+            Element nuevoPago = doc.createElement("pago");
+            
+            Element elemCasa = doc.createElement("casa");
+            elemCasa.setTextContent(casa);
+            
+            Element elemMes = doc.createElement("mes");
+            elemMes.setTextContent(mes);
+            
+            Element elemAño = doc.createElement("año");
+            elemAño.setTextContent(año);
+            
+            Element elemCuota = doc.createElement("cuota");
+            elemCuota.setTextContent(cuota);
+
+            nuevoPago.appendChild(elemCasa);
+            nuevoPago.appendChild(elemMes);
+            nuevoPago.appendChild(elemAño);
+            nuevoPago.appendChild(elemCuota);
+            
+            pagosRaiz.appendChild(nuevoPago);
+            guardarDocumento(doc);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar pago: " + e.getMessage());
+        }
+    }
+
+    // --- MÉTODOS DE SOPORTE POO (Encapsulamiento) ---
+
+    public static void registrarPagoPOO(int numCasa, Pago p) {
+        registrarPago("CASA " + numCasa, p.getMes(), String.valueOf(p.getAño()), String.valueOf(p.getMonto()));
+    }
+
+    // --- CONFIGURACIÓN ---
 
     public static String obtenerCuotaActual() {
         try {
             Document doc = obtenerDocumento();
-            if (doc == null) return "1500.00";
-
             NodeList lista = doc.getElementsByTagName("cuotaActual");
-            if (lista.getLength() > 0) {
-                return lista.item(0).getTextContent();
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error obteniendo cuota: " + e.getMessage());
-        }
+            if (lista.getLength() > 0) return lista.item(0).getTextContent();
+        } catch (Exception e) { }
         return "1500.00";
     }
 
     public static void actualizarCuota(String nuevaCuota) {
         try {
             Document doc = obtenerDocumento();
-            if (doc == null) return;
-
             NodeList lista = doc.getElementsByTagName("cuotaActual");
             if (lista.getLength() > 0) {
                 lista.item(0).setTextContent(nuevaCuota);
-            } else {
-                Element configuracion = doc.createElement("configuracion");
-                Element cuotaActual = doc.createElement("cuotaActual");
-                cuotaActual.setTextContent(nuevaCuota);
-                configuracion.appendChild(cuotaActual);
-                doc.getDocumentElement().appendChild(configuracion);
+                guardarDocumento(doc);
             }
-            guardarDocumento(doc);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error actualizando cuota: " + e.getMessage());
-        }
+        } catch (Exception e) { }
     }
-
-    public static String[] obtenerDatosPropietario(String casaBuscada) {
-        try {
-            Document doc = obtenerDocumento();
-            if (doc == null) return null;
-
-            NodeList listaCasas = doc.getElementsByTagName("casa");
-
-            // Normalizar
-            if (!casaBuscada.startsWith("CASA ")) {
-                casaBuscada = "CASA " + casaBuscada.trim();
-            }
-
-            for (int i = 0; i < listaCasas.getLength(); i++) {
-                Element casaElem = (Element) listaCasas.item(i);
-                String numero = casaElem.getAttribute("numero").trim();
-
-                if (numero.equals(casaBuscada)) {
-                    NodeList listaProp = casaElem.getElementsByTagName("propietario");
-                    if (listaProp.getLength() > 0) {
-                        Element prop = (Element) listaProp.item(0);
-                        String nombre = prop.getElementsByTagName("nombre").item(0).getTextContent().trim();
-                        String telefono = prop.getElementsByTagName("telefono").item(0).getTextContent().trim();
-                        String correo = prop.getElementsByTagName("correo").item(0).getTextContent().trim();
-
-                        return new String[]{nombre, telefono, correo};
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error al obtener datos del propietario: " + e.getMessage());
-        }
-        return null;
-    }
-    
-    
-  public static void registrarPago(String casa, String mes, String año, String cuota) {
-    try {
-        Document doc = obtenerDocumento();
-        if (doc == null) {
-            throw new Exception("No se pudo cargar el documento XML");
-        }
-
-        // Obtener o crear la sección <pagos>
-        NodeList listaPagosRaiz = doc.getElementsByTagName("pagos");
-        Element pagosRaiz;
-        
-        if (listaPagosRaiz.getLength() > 0) {
-            pagosRaiz = (Element) listaPagosRaiz.item(0);
-        } else {
-            pagosRaiz = doc.createElement("pagos");
-            doc.getDocumentElement().appendChild(pagosRaiz);
-        }
-
-        // Normalizar el nombre de la casa
-        String casaFormateada = casa.trim().startsWith("CASA") ? casa.trim() : "CASA " + casa.trim();
-
-        // Crear el elemento pago
-        Element nuevoPago = doc.createElement("pago");
-
-        Element elemCasa = doc.createElement("casa");
-        elemCasa.setTextContent(casaFormateada);
-
-        Element elemMes = doc.createElement("mes");
-        elemMes.setTextContent(mes);
-
-        Element elemAño = doc.createElement("año");
-        elemAño.setTextContent(año);
-
-        Element elemCuota = doc.createElement("cuota");
-        elemCuota.setTextContent(cuota);
-
-        // Agregar todo al pago
-        nuevoPago.appendChild(elemCasa);
-        nuevoPago.appendChild(elemMes);
-        nuevoPago.appendChild(elemAño);
-        nuevoPago.appendChild(elemCuota);
-
-        // Agregar el pago a la lista
-        pagosRaiz.appendChild(nuevoPago);
-
-        // Guardar cambios
-        guardarDocumento(doc);
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, 
-            "Error al registrar el pago: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-}  
-    
 }

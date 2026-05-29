@@ -100,27 +100,33 @@ public class ReporteGeneral extends javax.swing.JFrame {
     );
     }
     
-    
-    private String obtenerPropietario(Document doc, String casaBuscada) {
+private String obtenerPropietario(Document doc, String casaBuscada) {
+
     NodeList listaCasas = doc.getElementsByTagName("casa");
 
     for (int i = 0; i < listaCasas.getLength(); i++) {
+
         Element casaElemento = (Element) listaCasas.item(i);
 
         if (casaElemento.hasAttribute("numero")) {
+
             String numero = casaElemento.getAttribute("numero");
 
-            if (numero.equals(casaBuscada)) {
-                // CAMBIO AQUÍ: Buscamos la etiqueta <propietario>
+            // CORREGIDO
+            if (("CASA " + numero).equals(casaBuscada)) {
+
                 NodeList propietarios = casaElemento.getElementsByTagName("propietario");
 
                 if (propietarios.getLength() > 0) {
+
                     Element prop = (Element) propietarios.item(0);
-                    // CAMBIO AQUÍ: Dentro de propietario, buscamos <nombre>
+
                     NodeList nombres = prop.getElementsByTagName("nombre");
-                    
+
                     if (nombres.getLength() > 0) {
+
                         String nombre = nombres.item(0).getTextContent().trim();
+
                         if (!nombre.isEmpty()) {
                             return nombre;
                         }
@@ -129,10 +135,9 @@ public class ReporteGeneral extends javax.swing.JFrame {
             }
         }
     }
+
     return "Sin propietario";
 }
-    
-    
     
     private boolean existePagoMesActual(Document doc, String casaBuscada, String mesActual, String anioActual) {
     NodeList listaPagos = doc.getElementsByTagName("pago");
