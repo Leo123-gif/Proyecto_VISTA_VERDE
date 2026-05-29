@@ -378,6 +378,11 @@ if (propietario == null) {
             return;
         }
 
+        
+        
+        
+        
+        
         // =========================
         // VALIDAR DUPLICADOS
         // =========================
@@ -389,13 +394,36 @@ if (propietario == null) {
                 pago.getAño()
         );
 
-        if (existe) {
+if (existe) {
 
-            JOptionPane.showMessageDialog(this,
-                    "Ese pago ya existe.");
+    String siguienteMes =
+            obtenerSiguienteMesPendiente(
+                    numeroCasa,
+                    año
+            );
 
-            return;
-        }
+    if (siguienteMes != null) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "El mes " + mes
+                + " ya fue pagado.\n\n"
+                + "Sugerencia: registrar "
+                + siguienteMes
+        );
+
+    } else {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Todos los meses del año "
+                + año
+                + " ya fueron pagados."
+        );
+    }
+
+    return;
+}
 
         // =========================
         // CONFIRMACIÓN
@@ -582,4 +610,38 @@ private void enviarCorreoPago(String casa, String mes, String año, String cuota
             e.printStackTrace();
         }
     }).start();
-}}
+}
+
+    private String obtenerSiguienteMesPendiente(int numeroCasa, int año) {
+      String[] meses = {
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+    };
+
+    for (String mes : meses) {
+
+        boolean pagado =
+                BDXML.existePago(
+                        numeroCasa,
+                        mes,
+                        año
+                );
+
+        if (!pagado) {
+            return mes + " " + año;
+        }
+    }
+
+    return null;
+    }
+}
