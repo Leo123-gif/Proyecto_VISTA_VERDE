@@ -8,12 +8,6 @@ package com.mycompany.condominio_vistaverde;
  *
  * @author Josue
  */
-import com.mycompany.condominio_vistaverde.CasasMorosas;
-import com.mycompany.condominio_vistaverde.ConfiguraciónCuota;
-import com.mycompany.condominio_vistaverde.EstadoCuentaPorCasas;
-import com.mycompany.condominio_vistaverde.RegistroCuotaPago;
-import com.mycompany.condominio_vistaverde.RegistroPropietario;
-import com.mycompany.condominio_vistaverde.ReporteGeneral;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
