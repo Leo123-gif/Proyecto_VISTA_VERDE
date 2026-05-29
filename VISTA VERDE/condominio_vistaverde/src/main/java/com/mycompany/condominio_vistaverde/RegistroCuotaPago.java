@@ -308,86 +308,60 @@ cmbAño.addItem("Seleccionar");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
-// --- COMIENZO DEL CÓDIGO DEL BOTÓN ---
-    String casaRaw = cmbCasas.getSelectedItem().toString().trim();
+// --- CÓDIGO REFACTORIZADO A POO (REEMPLAZAR TODO EL CONTENIDO DEL BOTÓN) ---
+
+// 1. CAPTURA DE DATOS DESDE LA UI
+String casaRaw = cmbCasas.getSelectedItem().toString().trim();
+int numCasa = Integer.parseInt(casaRaw.replace("CASA ", "")); // Extraer solo el número
+String mes = cmbMes.getSelectedItem().toString();
+int año = Integer.parseInt(cmbAño.getSelectedItem().toString());
+double monto = Double.parseDouble(txtCuota.getText().replace("Q.", "").trim());
+
+// 2. BUSCAR DUEÑO Y CREAR OBJETO PROPIETARIO
+String[] datos = BDXML.obtenerDatosPropietario("CASA " + numCasa);
+if (datos == null || datos[0].equals("Sin dueño")) {
+    JOptionPane.showMessageDialog(this, "ERROR: No hay dueño para la casa " + numCasa);
+    return;
+}
+// Creamos el objeto Propietario (POO)
+Propietario dueño = new Propietario(datos[0], datos[1], datos[2], numCasa);
+
+// 3. CREAR OBJETO PAGO (POO)
+Pago nuevoPago = new Pago(mes, año, monto, "PAGADO");
+
+// 4. VALIDACIONES (Usando los datos de los objetos)
+String mesFaltante = obtenerMesAnteriorNoPagado("CASA " + numCasa, nuevoPago.getMes(), String.valueOf(nuevoPago.getAño()));
+if (mesFaltante != null) {
+    JOptionPane.showMessageDialog(this, "Falta el pago de: " + mesFaltante);
+    return;
+}
+
+if (BDXML.existePago("CASA " + numCasa, nuevoPago.getMes(), String.valueOf(nuevoPago.getAño()))) {
+    JOptionPane.showMessageDialog(this, "Ya existe un pago para este mes.");
+    return;
+}
+
+// 5. CONFIRMACIÓN
+int respuesta = JOptionPane.showConfirmDialog(this, 
+    "¿Registrar pago para " + dueño.getNombre() + "?\n" +
+    "Monto: Q." + nuevoPago.getMonto(), "Confirmar", JOptionPane.YES_NO_OPTION);
+
+if (respuesta == JOptionPane.YES_OPTION) {
+    // 6. PROCESAR USANDO EL OBJETO
+    BDXML.registrarPagoPOO(numCasa, nuevoPago);
+
+    // 7. ENVÍO DE CORREO USANDO LOS GETTERS DEL OBJETO
+    enviarCorreoPago("CASA " + numCasa, nuevoPago.getMes(), 
+                     String.valueOf(nuevoPago.getAño()), 
+                     String.valueOf(nuevoPago.getMonto()), 
+                     dueño.getCorreo(), dueño.getNombre());
+
+    JOptionPane.showMessageDialog(this, "Pago exitoso. Recibo enviado a: " + dueño.getCorreo());
     
-    // === NORMALIZACIÓN IMPORTANTE ===
-    String casa = casaRaw.startsWith("CASA") ? casaRaw : "CASA " + casaRaw;
-
-    String mes = cmbMes.getSelectedItem().toString();
-    String año = cmbAño.getSelectedItem().toString();
-
-    // 1. BUSCAR DUEÑO EN EL XML
-    String[] datosDueño = BDXML.obtenerDatosPropietario(casa);
-    
-    if (datosDueño == null || datosDueño[0].equals("Sin dueño")) {
-        JOptionPane.showMessageDialog(this,
-            "ERROR: No hay ningún dueño registrado para la " + casa + ".\n" +
-            "Debe registrar al propietario antes de recibir pagos.",
-            "Sin Propietario", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    String nombrePropietario = datosDueño[0];
-    String telefono = datosDueño[1];      // Aunque no lo uses ahora, está disponible
-    String correoDestino = datosDueño[2]; // Correo está en la posición 2
-
-    // OBTENER CUOTA ACTUAL
-    String cuota = BDXML.obtenerCuotaActual();
-
-    // --- VALIDACIÓN CRONOLÓGICA ---
-    String mesFaltante = obtenerMesAnteriorNoPagado(casa, mes, año);
-    if (mesFaltante != null) {
-        JOptionPane.showMessageDialog(this,
-                "No se permite registrar el mes de " + mes + ".\n"
-                + "Falta registrar el pago del mes de: " + mesFaltante + " del año " + año,
-                "Pago correlativo requerido",
-                JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    // --- VALIDAR DUPLICADOS ---
-    if (BDXML.existePago(casa, mes, año)) {
-        JOptionPane.showMessageDialog(this,
-                "Ya existe un pago registrado para " + casa + " en " + mes + " del año " + año);
-        return;
-    }
-
-    // CONFIRMACIÓN CON NOMBRE DEL DUEÑO
-    Object[] opciones = {"Sí", "No"};
-    int respuesta = JOptionPane.showOptionDialog(
-            this,
-            "¿Está seguro de registrar el pago?\n\n"
-            + "Propietario: " + nombrePropietario + "\n"
-            + "Casa: " + casa + "\n"
-            + "Mes: " + mes + "\n"
-            + "Año: " + año + "\n"
-            + "Cuota: Q." + cuota,
-            "Confirmar pago",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null, opciones, opciones[0]
-    );
-
-    if (respuesta != JOptionPane.YES_OPTION) {
-        return;
-    }
-
-    // REGISTRO DEL PAGO
-    BDXML.registrarPago(casa, mes, año, cuota);
-
-    // ENVÍO DE CORREO
-    enviarCorreoPago(casa, mes, año, cuota, correoDestino, nombrePropietario);
-
-    JOptionPane.showMessageDialog(this, 
-        "Pago registrado correctamente y recibo enviado a: " + correoDestino);
-
-    // RESET
+    // RESET UI
     cmbCasas.setSelectedIndex(0);
-    cmbMes.setSelectedIndex(0);
-    cmbAño.setSelectedIndex(0);
-    txtCuota.setText("Q. " + cuota);
     btnPago.setEnabled(false);
+}
     }//GEN-LAST:event_btnPagoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
