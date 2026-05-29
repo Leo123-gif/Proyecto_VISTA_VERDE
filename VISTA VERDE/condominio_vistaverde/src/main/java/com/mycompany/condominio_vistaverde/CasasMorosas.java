@@ -4,8 +4,6 @@
  */
 package com.mycompany.condominio_vistaverde;
 
-import com.mycompany.condominio_vistaverde.BDXML;
-import com.mycompany.condominio_vistaverde.MenuPrincipal;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -45,7 +43,7 @@ public class CasasMorosas extends javax.swing.JFrame {
     );
 }
     
-   private void cargarCasasMorosas() {
+private void cargarCasasMorosas() {
 
     DefaultTableModel modelo =
             (DefaultTableModel) tblMorosos.getModel();
@@ -56,112 +54,86 @@ public class CasasMorosas extends javax.swing.JFrame {
 
     try {
 
-        org.w3c.dom.Document doc = BDXML.obtenerDocumento();
+        // =========================================
+        // FECHA ACTUAL
+        // =========================================
 
-        if (doc == null) {
-            return;
-        }
+        LocalDate fecha = LocalDate.now();
 
-        java.time.LocalDate fecha =
-                java.time.LocalDate.now();
+        String mesActual =
+                fecha.getMonth()
+                        .getDisplayName(
+                                TextStyle.FULL,
+                                new Locale("es", "ES")
+                        );
 
-        String mesActual = fecha.getMonth()
-                .getDisplayName(
-                        java.time.format.TextStyle.FULL,
-                        new java.util.Locale("es", "ES")
-                );
-
-        mesActual = mesActual.substring(0,1).toUpperCase()
+        mesActual =
+                mesActual.substring(0, 1).toUpperCase()
                 + mesActual.substring(1);
 
-        String añoActual =
-                String.valueOf(fecha.getYear());
+        int añoActual = fecha.getYear();
 
-        org.w3c.dom.NodeList listaCasas =
-                doc.getElementsByTagName("casa");
+        // =========================================
+        // RECORRER LAS 30 CASAS
+        // =========================================
 
-        for (int i = 0; i < listaCasas.getLength(); i++) {
+        for (int numeroCasa = 1;
+                numeroCasa <= 30;
+                numeroCasa++) {
 
-            org.w3c.dom.Element casa =
-                    (org.w3c.dom.Element)
-                    listaCasas.item(i);
+            // =====================================
+            // OBTENER PROPIETARIO COMO OBJETO
+            // =====================================
 
-            String numeroCasa =
-                    casa.getAttribute("numero");
+            Propietario propietario =
+                    BDXML.obtenerPropietario(
+                            numeroCasa
+                    );
 
-            // VALIDAR SI TIENE PROPIETARIO
-            boolean tienePropietario =
-                    casa.getElementsByTagName("propietario")
-                    .getLength() > 0;
+            // =====================================
+            // SI NO TIENE PROPIETARIO
+            // NO MOSTRAR
+            // =====================================
 
-            // VALIDAR SI TIENE PAGOS
-            boolean tienePagos = false;
-
-            org.w3c.dom.NodeList listaPagos =
-                    doc.getElementsByTagName("pago");
-
-            for (int j = 0; j < listaPagos.getLength(); j++) {
-
-                org.w3c.dom.Element pago =
-                        (org.w3c.dom.Element)
-                        listaPagos.item(j);
-
-                String casaPago =
-                        pago.getElementsByTagName("casa")
-                        .item(0)
-                        .getTextContent();
-
-                if (casaPago.equals(numeroCasa)) {
-
-                    tienePagos = true;
-                    break;
-                }
-            }
-
-            // SI NO TIENE DATOS, NO MOSTRAR
-            if (!tienePropietario && !tienePagos) {
+            if (propietario == null) {
                 continue;
             }
 
-            String nombre = "Sin propietario";
-            String telefono = "-";
+            // =====================================
+            // VALIDAR SI YA PAGÓ
+            // =====================================
 
-            if (tienePropietario) {
+            boolean pagoRealizado =
+                    BDXML.existePago(
+                            numeroCasa,
+                            mesActual,
+                            añoActual
+                    );
 
-                org.w3c.dom.Element prop =
-                        (org.w3c.dom.Element)
-                        casa.getElementsByTagName("propietario")
-                        .item(0);
+            // =====================================
+            // SI NO PAGÓ → ES MOROSO
+            // =====================================
 
-                nombre = prop.getElementsByTagName("nombre")
-                        .item(0)
-                        .getTextContent();
-
-                telefono = prop.getElementsByTagName("telefono")
-                        .item(0)
-                        .getTextContent();
-            }
-
-            boolean pagó = BDXML.existePago(
-                    numeroCasa,
-                    mesActual,
-                    añoActual
-            );
-
-            // SOLO MOSTRAR SI NO PAGÓ
-            if (!pagó) {
+            if (!pagoRealizado) {
 
                 modelo.addRow(new Object[]{
 
-                    numeroCasa,
-                    nombre,
-                    telefono,
+                    "CASA " + numeroCasa,
+
+                    propietario.getNombre(),
+
+                    propietario.getTelefono(),
+
                     mesActual + " " + añoActual
                 });
 
                 totalMorosos++;
             }
         }
+
+        // =========================================
+        // TOTAL MOROSOS
+        // =========================================
 
         lblTotalMorosos.setText(
                 "Total casas morosas: "
@@ -172,15 +144,12 @@ public class CasasMorosas extends javax.swing.JFrame {
 
         javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Error cargando casas morosas: "
+                "Error cargando casas morosas:\n"
                 + e.getMessage()
         );
 
-        e.printStackTrace();
     }
 }
-
-
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
