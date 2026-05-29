@@ -228,13 +228,18 @@ private void limpiarCampos() {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cellphoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cellphoneKeyTyped
-  char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
 
-    if(!Character.isDigit(c)){
+        if (!Character.isDigit(c)) {
+            evt.consume();
+            JOptionPane.showMessageDialog(this, "El teléfono solo debe contener números.");
+            return;
+        }
 
-        evt.consume();
-
-    }        // TODO add your handling code here:
+        if (cellphone.getText().length() >= 8) {
+            evt.consume();
+            JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 8 dígitos.");
+        }       // TODO add your handling code here:
     }//GEN-LAST:event_cellphoneKeyTyped
 
     private void nombrecomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombrecomKeyTyped
