@@ -21,10 +21,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
+         // Define el tamaño de la ventana principal y evita que pueda redimensionarse
         this.setSize(900, 681);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-
+// Muestra la fecha y hora actual en el encabezado del menú
         mostrarFecha();
         mostrarHora();   
     }
@@ -35,12 +36,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     SimpleDateFormat formatoFecha =
             new SimpleDateFormat("dd/MM/yyyy");
-
+    
+ // Coloca la fecha formateada en la etiqueta correspondiente
     lblFecha.setText(formatoFecha.format(fechaActual));
 }
     
    public void mostrarHora(){
-
+   // Timer que actualiza la hora cada segundo
     javax.swing.Timer timer =
             new javax.swing.Timer(1000, e -> {
 
@@ -49,6 +51,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         SimpleDateFormat formatoHora =
                 new SimpleDateFormat("hh:mm:ss a");
 
+         // Muestra la hora actualizada en la pantalla
         lblHora.setText(formatoHora.format(horaActual));
     });
 
@@ -239,7 +242,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        // Regresa a la pantalla de inicio de sesión
         LoginPrincipal lg = new LoginPrincipal ();
         lg.setVisible(true);
         dispose();
@@ -247,41 +250,43 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // Abre la pantalla para registrar propietarios
         RegistroPropietario RP = new RegistroPropietario();
         RP.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+       // Abre la pantalla para modificar la cuota mensual
         ConfiguraciónCuota EDC = new ConfiguraciónCuota();
         EDC.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        // Abre la pantalla del reporte general del condominio
         ReporteGeneral RG = new ReporteGeneral();
         RG.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        // Abre la pantalla que muestra las casas con pagos pendientes
         CasasMorosas CM = new CasasMorosas();
         CM.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
- RegistroCuotaPago Rp = new RegistroCuotaPago ();
+        // Abre la pantalla para registrar pagos de cuota
+        RegistroCuotaPago Rp = new RegistroCuotaPago ();
         Rp.setVisible(true);
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-EstadoCuentaPorCasas Estadxcasa = new EstadoCuentaPorCasas();
+        // Abre la pantalla para consultar el estado de cuenta por casa
+        EstadoCuentaPorCasas Estadxcasa = new EstadoCuentaPorCasas();
         Estadxcasa.setVisible(true);
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed

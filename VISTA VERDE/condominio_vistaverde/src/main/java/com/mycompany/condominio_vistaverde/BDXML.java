@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class BDXML {
-
+// Ruta del archivo XML donde se almacenan los datos del residencial
     private static final String RUTA = "residencial.xml";
 
     // =====================================================
