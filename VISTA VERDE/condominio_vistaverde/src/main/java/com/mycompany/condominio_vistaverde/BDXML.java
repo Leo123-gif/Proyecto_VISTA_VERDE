@@ -698,4 +698,42 @@ public class BDXML {
             e.printStackTrace();
         }
     }
+    
+    public static boolean casaTienePropietario(int numeroCasa) {
+
+    try {
+
+        Document doc = obtenerDocumento();
+
+        NodeList listaCasas =
+                doc.getElementsByTagName("casa");
+
+        for (int i = 0; i < listaCasas.getLength(); i++) {
+
+            Element casaElem =
+                    (Element) listaCasas.item(i);
+
+            String numeroXML =
+                    casaElem.getAttribute("numero");
+
+            if (numeroXML.equals(
+                    String.valueOf(numeroCasa))) {
+
+                NodeList propietarios =
+                        casaElem.getElementsByTagName(
+                                "propietario"
+                        );
+
+                return propietarios.getLength() > 0;
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+    
+    
 }
