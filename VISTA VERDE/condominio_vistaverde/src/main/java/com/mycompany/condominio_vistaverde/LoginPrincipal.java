@@ -16,15 +16,13 @@ public class LoginPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginPrincipal.class.getName());
 
-    /**
-     * Creates new form LoginPrincipal
-     */
+   // Contador de intentos fallidos al iniciar sesión
     int intentos=0;
-    boolean bloqueado=false;
+    boolean bloqueado=false; // Indica si el acceso al sistema se encuentra bloqueado
     public LoginPrincipal() {
         initComponents();
          this.setLocationRelativeTo(null);
-    this.setResizable(false);
+    this.setResizable(false); // Centra la ventana en la pantalla y evita que el usuario cambie su tamaño
         
     }
 
@@ -128,7 +126,7 @@ public class LoginPrincipal extends javax.swing.JFrame {
         "El sistema está bloqueado.");
     return;
 }
-
+// Obtiene los datos ingresados por el usuario en los campos del formulario
 String usuario = txtUsuario1.getText();
 String password = String.valueOf(txtPassword.getPassword());
 

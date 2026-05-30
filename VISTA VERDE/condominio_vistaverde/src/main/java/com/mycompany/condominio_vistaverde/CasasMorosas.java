@@ -19,9 +19,12 @@ public class CasasMorosas extends javax.swing.JFrame {
      */
     public CasasMorosas() {
         initComponents();
+        // Configura el tamaño, posición y bloqueo de redimensionamiento de la ventana
                 this.setSize(900, 681);
     this.setLocationRelativeTo(null);
     this.setResizable(false);
+    
+    // Carga la información inicial de casas morosas y muestra el mes actual
     cargarCasasMorosas();
     cargarMesActual();
     tblMorosos.setDefaultEditor(Object.class, null);

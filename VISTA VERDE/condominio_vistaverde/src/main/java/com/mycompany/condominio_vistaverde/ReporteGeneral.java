@@ -12,15 +12,17 @@ public class ReporteGeneral extends javax.swing.JFrame {
 
     public ReporteGeneral() {
         initComponents();
+        // Configura el tamaño, posición y bloqueo de redimensionamiento de la ventana
     this.setSize(900, 681);
     this.setLocationRelativeTo(null);
     this.setResizable(false);
     
-    
+    // Carga automáticamente la información del reporte general al abrir la pantalla
     cargarReporteGeneral();
     }
     
     private double calcularTotalRecaudadoMes(Document doc, String mesActual, String anioActual) {
+        // Acumula el monto total de los pagos realizados en el mes y año indicados
     double total = 0;
 
     NodeList listaPagos = doc.getElementsByTagName("pago");
@@ -381,16 +383,18 @@ private String obtenerPropietario(Document doc, String casaBuscada) {
 }
     
     private String obtenerTexto(Element elementoPadre, String etiqueta) {
+         // Busca una etiqueta dentro de un elemento XML y devuelve su contenido
     NodeList lista = elementoPadre.getElementsByTagName(etiqueta);
 
     if (lista.getLength() > 0) {
         return lista.item(0).getTextContent().trim();
     }
-
+// Si la etiqueta no existe, devuelve texto vacío para evitar errores
     return "";
 }
     
     private String obtenerNombreMes(int numeroMes) {
+        // Convierte el número del mes en su nombre correspondiente
     switch (numeroMes) {
         case 1:
             return "Enero";
