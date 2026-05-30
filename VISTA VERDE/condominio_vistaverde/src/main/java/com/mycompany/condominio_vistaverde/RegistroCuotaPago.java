@@ -20,24 +20,28 @@ public class RegistroCuotaPago extends javax.swing.JFrame {
      * Creates new form RegistroCuotaPago
      */
     public RegistroCuotaPago() {
-
-    initComponents();
+initComponents();
 
     txtCuota.setEditable(false);
 
-txtCuota.setText(
-        "Q." + BDXML.obtenerCuotaActual());
+    txtCuota.setText(
+            "Q." + BDXML.obtenerCuotaActual()
+    );
+
     CargarCasas();
-    CargarMeses();
     CargarAños();
 
+    // Dejar vacío inicialmente
+    cmbMes.removeAllItems();
+    cmbMes.addItem("Seleccionar");
+
     btnPago.setEnabled(false);
-            this.setSize(900, 681);
+
+    this.setSize(900, 681);
     this.setLocationRelativeTo(null);
     this.setResizable(false);
     }
-    
-   private void CargarCasas() {
+private void CargarCasas() {
 
     DefaultComboBoxModel<String> modelo =
             new DefaultComboBoxModel<>();
@@ -45,12 +49,18 @@ txtCuota.setText(
     modelo.addElement("Seleccionar");
 
     for (int i = 1; i <= 30; i++) {
-        modelo.addElement("CASA " + i);
+
+        Propietario propietario =
+                BDXML.obtenerPropietario(i);
+
+        if (propietario != null) {
+
+            modelo.addElement("CASA " + i);
+        }
     }
 
     cmbCasas.setModel(modelo);
 }
-    
      private void CargarMeses() {
 
     cmbMes.removeAllItems();
@@ -465,8 +475,15 @@ if (existe) {
         // MENSAJE
         // =========================
 
-        JOptionPane.showMessageDialog(this,
-                "Pago registrado correctamente.");
+JOptionPane.showMessageDialog(
+        this,
+        "Pago registrado correctamente."
+);
+
+cargarMesesPendientes();
+
+cmbMes.setSelectedIndex(0);
+btnPago.setEnabled(false);
 
         // =========================
         // LIMPIAR FORMULARIO
@@ -498,8 +515,11 @@ if (existe) {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void cmbCasasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCasasActionPerformed
-        validarCombos();
-    // TODO add your handling code here:
+    if (cmbAño.getSelectedIndex() > 0) {
+        cargarMesesPendientes();
+    }
+
+    validarCombos();
     }//GEN-LAST:event_cmbCasasActionPerformed
 
     private void cmbMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMesActionPerformed
@@ -507,7 +527,11 @@ if (existe) {
     }//GEN-LAST:event_cmbMesActionPerformed
 
     private void cmbAñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAñoActionPerformed
-    validarCombos();        // TODO add your handling code here:
+    if (cmbCasas.getSelectedIndex() > 0) {
+        cargarMesesPendientes();
+    }
+
+    validarCombos();    // TODO add your handling code here:
     }//GEN-LAST:event_cmbAñoActionPerformed
 
     /**
@@ -639,4 +663,40 @@ private void enviarCorreoPago(String casa, String mes, String año, String cuota
 
     return null;
     }
+    
+    private void cargarMesesPendientes() {
+
+       cmbMes.removeAllItems();
+    cmbMes.addItem("Seleccionar");
+
+    if (cmbCasas.getSelectedIndex() <= 0
+            || cmbAño.getSelectedIndex() <= 0) {
+        return;
+    }
+
+    int numeroCasa = Integer.parseInt(
+            cmbCasas.getSelectedItem()
+                    .toString()
+                    .replace("CASA ", "")
+    );
+
+    int anio = Integer.parseInt(
+            cmbAño.getSelectedItem().toString()
+    );
+
+    for (String mes : ORDEN_MESES) {
+
+        if (!BDXML.existePago(
+                numeroCasa,
+                mes,
+                anio
+        )) {
+
+            cmbMes.addItem(mes);
+        }
+    }
+}
+    
+    
+    
 }
