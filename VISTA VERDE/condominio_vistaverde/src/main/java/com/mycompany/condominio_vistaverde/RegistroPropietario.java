@@ -224,7 +224,11 @@ if (tel.length() != 8) {
 
 // Validar correo
 if (!validarCorreo(mail)) {
-    JOptionPane.showMessageDialog(this, "Correo inválido.");
+    JOptionPane.showMessageDialog(
+            this,
+            "Correo inválido. Debe contener un dominio válido"
+    );
+    correo.requestFocus();
     return;
 }
 
@@ -370,7 +374,13 @@ private void limpiarCampos() {
 
 public boolean validarCorreo(String correo){
 
-    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+    if (correo == null || correo.trim().isEmpty()) {
+        return false;
+    }
+
+    correo = correo.trim().toLowerCase();
+
+    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.(com|edu|net|org|info|gov|gob|gt|com\\.gt|edu\\.gt|gob\\.gt)$";
 
     return correo.matches(regex);
 }
