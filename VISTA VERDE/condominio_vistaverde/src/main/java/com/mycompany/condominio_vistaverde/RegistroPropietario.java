@@ -25,15 +25,18 @@ public class RegistroPropietario extends javax.swing.JFrame {
         this.setResizable(false);
     }
     
-    private void cargarCasas() {
-        nocasas.removeAllItems();
-        nocasas.addItem("Seleccione una casa");
+  private void cargarCasas() {
 
-        for (int i = 1; i <= 30; i++) {
+    nocasas.removeAllItems();
+    nocasas.addItem("Seleccione una casa");
+
+    for (int i = 1; i <= 30; i++) {
+
+        if (!BDXML.casaTienePropietario(i)) {
             nocasas.addItem(String.valueOf(i));
         }
     }
-
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -196,82 +199,93 @@ public class RegistroPropietario extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 String nombre = nombrecom.getText().trim();
-    String casaStr = nocasas.getSelectedItem().toString();
-    String tel = cellphone.getText().trim();
-    String mail = correo.getText().trim();
+String casaStr = nocasas.getSelectedItem().toString();
+String tel = cellphone.getText().trim();
+String mail = correo.getText().trim();
 
-    // 1. Validaciones iniciales de selección
-    if (casaStr.equals("Seleccione una casa")) {
-        JOptionPane.showMessageDialog(this, "Debe seleccionar un número de casa.");
-        return;
-    }
+// Validar selección de casa
+if (casaStr.equals("Seleccione una casa")) {
+    JOptionPane.showMessageDialog(this, "Debe seleccionar un número de casa.");
+    return;
+}
 
-    // 2. Validar que no haya campos vacíos
-    if (nombre.isEmpty() || tel.isEmpty() || mail.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
-        return;
-    }
+// Validar campos vacíos
+if (nombre.isEmpty() || tel.isEmpty() || mail.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+    return;
+}
 
-    // 3. VALIDACIÓN DE LOS 8 DÍGITOS (AQUÍ ES DONDE SE EXIGE)
-    if (tel.length() != 8) {
-        JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 8 dígitos.");
-        cellphone.requestFocus(); // Esto pone el cursor en el campo del teléfono
-        return; // Esto detiene el proceso y NO guarda nada
-    }
+// Validar teléfono
+if (tel.length() != 8) {
+    JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 8 dígitos.");
+    cellphone.requestFocus();
+    return;
+}
 
-    // 4. Validar formato de correo
-    if (!validarCorreo(mail)) {
-        JOptionPane.showMessageDialog(this, "Correo inválido.");
-        return;
-    }
+// Validar correo
+if (!validarCorreo(mail)) {
+    JOptionPane.showMessageDialog(this, "Correo inválido.");
+    return;
+}
 
-    // --- Si llega aquí, significa que el teléfono tiene 8 números y todo está bien ---
+int numCasa = Integer.parseInt(casaStr);
 
-    int numCasa = Integer.parseInt(casaStr);
-
-    Propietario nuevoPropietario = new Propietario(
+Propietario nuevoPropietario = new Propietario(
         nombre,
         tel,
         mail,
         numCasa
-    );
+);
 
-    new Thread(() -> {
-        try {
-            boolean registrado = BDXML.registrarPropietario(nuevoPropietario);
+new Thread(() -> {
+    try {
 
-            if (!registrado) {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Esta casa ya tiene un propietario registrado."
-                    );
-                });
-                return;
-            }
+        boolean registrado =
+                BDXML.registrarPropietario(nuevoPropietario);
 
-            enviarCorreoVerificacion(
+        // Seguridad extra por si alguien modifica el XML manualmente
+        if (!registrado) {
+
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                cargarCasas();
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "La casa seleccionada ya no está disponible."
+                );
+            });
+
+            return;
+        }
+
+        enviarCorreoVerificacion(
                 nuevoPropietario.getCorreo(),
                 nuevoPropietario.getNombre()
+        );
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Registro exitoso de: "
+                    + nuevoPropietario.getNombre()
             );
 
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(
-                    this,
-                    "Registro exitoso de: " + nuevoPropietario.getNombre()
-                );
-                limpiarCampos();
-            });
+            cargarCasas();
+            limpiarCampos();
+        });
 
-        } catch (Exception e) {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(
+    } catch (Exception e) {
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+
+            JOptionPane.showMessageDialog(
                     this,
                     "Error: " + e.getMessage()
-                );
-            });
-        }
-    }).start();
+            );
+        });
+    }
+}).start();
     }
 
 // Método de apoyo para limpiar
