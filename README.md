@@ -23,7 +23,10 @@ Sistema de escritorio que permite administrar el cobro y control de cuotas de ma
 - Java Swing
 - GitHub
 - Jira
-
+-flatlaf
+-xml
+  -netbeans
+  -chatgpt
 
 ## Estructura del proyecto
 
